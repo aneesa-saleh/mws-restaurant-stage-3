@@ -102,6 +102,50 @@ class DBHelper {
       .catch((error) => { callback(error, null); });
   }
 
+
+  /**
+   * Fetch reviews by restaurant ID.
+   */
+  static fetchReviewsByRestaurantId(id, callback) {
+    dbPromise.then((db) => {
+      const reviewsByRestaurantIdURL = `${DBHelper.DATABASE_URL}/reviews/?restaurant_id=${id}`;
+
+      // if (!db) {
+        // make regular fetch call
+        return fetch(reviewsByRestaurantIdURL)
+          .then((response) => {
+            if (!response.ok) {
+              const error = (`Request failed. Returned status of ${response.status}`);
+              return Promise.reject(error);
+            }
+            return response.json();
+          });
+      // }
+
+      // // return restaurant from IDB
+      // let store = db.transaction('restaurants').objectStore('restaurants');
+      // // id comes as a string from the url, convert to a number before lookup
+      // return store.get(Number.parseInt(id, 10)).then((idbRestaurant) => {
+      //   const fetchResponse = fetch(restaurantByIdURL)
+      //     .then((response) => {
+      //       if (!response.ok) {
+      //         const error = (`Request failed. Returned status of ${response.status}`);
+      //         return Promise.reject(error);
+      //       }
+      //       const responseJSON = response.clone().json();
+      //       // update IDB restaurants with fetch response even if value from IDB will be returned
+      //       responseJSON.then((fetchedRestaurant) => {
+      //         store = db.transaction('restaurants', 'readwrite').objectStore('restaurants');
+      //         store.put(fetchedRestaurant);
+      //       });
+      //       return response.json();
+      //     });
+      //   return idbRestaurant || fetchResponse;
+      // });
+    }).then((reviews) => { callback(null, reviews); })
+      .catch((error) => { callback(error, null); });
+  }
+
   /**
    * Fetch restaurants by a cuisine type with proper error handling.
    */

@@ -1,4 +1,5 @@
 let restaurant;
+let reviews;
 let newMap;
 let matchesMediaQuery;
 const mediaQuery = '(min-width: 800px)';
@@ -8,6 +9,7 @@ const mediaQuery = '(min-width: 800px)';
  */
 document.addEventListener('DOMContentLoaded', (event) => {
   initMap();
+  fetchReviews();
   if (window.matchMedia) {
     matchesMediaQuery = window.matchMedia(mediaQuery).matches;
   }
@@ -148,8 +150,6 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
   if (restaurant.operating_hours) {
     fillRestaurantHoursHTML();
   }
-  // fill reviews
-  fillReviewsHTML();
 };
 
 /**
@@ -175,9 +175,28 @@ const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hour
 };
 
 /**
+ * Get current restaurant from page URL.
+ */
+const fetchReviews = () => {
+  const id = getParameterByName('id');
+  if (!id) { // no id found in URL
+    console.log('No restaurant id in URL');
+  } else {
+    DBHelper.fetchReviewsByRestaurantId(id, (error, reviews) => {
+      self.reviews = reviews;
+      if (!reviews) {
+        console.error(error);
+        return;
+      }
+      fillReviewsHTML();
+    });
+  }
+};
+
+/**
  * Create all reviews HTML and add them to the webpage.
  */
-const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
+const fillReviewsHTML = (reviews = self.reviews) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h2');
   title.innerHTML = 'Reviews';
@@ -212,7 +231,8 @@ const createReviewHTML = (review) => {
   headerSpan.appendChild(name);
 
   const date = document.createElement('p');
-  date.innerHTML = review.date;
+  const dateText = formatDate(new Date(review.updatedAt));
+  date.innerHTML = dateText;
   date.className = 'review-date';
   headerSpan.appendChild(date);
   article.appendChild(headerSpan);
