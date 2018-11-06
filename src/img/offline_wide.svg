@@ -1,0 +1,29 @@
+<svg width="400" height="200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <path d="m0,0l400,0l0,200l-400,0l0,-200z" id="b"/>
+  <text xml:space="preserve" font-size="24" font-family="Verdana" y="71.93" x="184.4986" id="a">
+   <tspan id="svg_1" dy="0em" x="184.4986">☕</tspan>
+  </text>
+  <style>@font-face {
+    font-family: Verdana;
+    font-weight: 200;
+    }</style>
+  <text xml:space="preserve" font-size="10" font-family="Verdana" y="107.993" x="125" id="c">
+   <tspan id="svg_2" dy="0em" x="125">YOU ARE OFFLINE</tspan>
+  </text>
+ </defs>
+ <g>
+  <title>background</title>
+  <rect id="svg_3" height="202" width="402" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <use id="svg_4" xlink:href="#b" fill="#e9e9e9"/>
+  <use id="svg_5" xlink:href="#a" fill="#7fd4fb" y="15" x="7"/>
+  <use x="31" y="1" id="svg_6" xlink:href="#c" fill="#000000"/>
+ </g>
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="402" width="582" y="-1" x="-1"/>
+ </g>
+</svg>
