@@ -13,3 +13,9 @@ function formatDate(date) {
 
   return `${month} ${day}, ${year}`;
 }
+
+function stringToBoolean(string) {
+  if (typeof string === 'boolen') return string;
+
+  return string === 'true';
+}

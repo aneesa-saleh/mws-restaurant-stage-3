@@ -270,4 +270,19 @@ class DBHelper {
     marker.addTo(newMap);
     return marker;
   }
+
+  static setRestaurantFavouriteStatus(restaurant_id, status, callback) {
+    const setFavouriteStatusUrl = `${DBHelper.DATABASE_URL}/restaurants/${restaurant_id}/?is_favorite=${status}`;
+    fetch(setFavouriteStatusUrl, { method: 'PUT' }).then((response) => {
+      if(!response.ok) {
+        return Promise.reject();
+      }
+      return response.json();
+    }).then((updatedRestaurant) => {
+      //update in service worker
+      callback(null, updatedRestaurant);
+    }).catch((error) => {
+      callback(error, null);
+    });
+  }
 }

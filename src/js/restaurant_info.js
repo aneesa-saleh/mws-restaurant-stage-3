@@ -201,7 +201,7 @@ const unmarkRestaurantAsFavourite = (button) => {
  */
 const fillMarkAsFavouriteHTML = (isFavourite = self.restaurant.is_favorite) => {
   const favouriteButton = document.getElementById('mark-as-favourite');
-  if (isFavourite) {
+  if (stringToBoolean(isFavourite)) {
     markRestaurantAsFavourite(favouriteButton);
   } else {
     unmarkRestaurantAsFavourite(favouriteButton);
@@ -312,3 +312,41 @@ const getParameterByName = (name, url) => {
   if (!results[2]) return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 };
+
+const setMarkAsFavouriteFetchingState = (button, spinner) => {
+  button.setAttribute('disabled', true);
+  button.setAttribute('aria-busy', 'true');
+  spinner.classList.add('show');
+}
+
+const removeMarkAsFavouriteFetchingState = (button, spinner) => {
+  button.removeAttribute('disabled');
+  button.setAttribute('aria-busy', 'false');
+  spinner.classList.remove('show');
+}
+
+const toggleRestaurantAsFavourite = () => {
+  const isFavourite = stringToBoolean(self.restaurant.is_favorite);
+  const newIsFavourite = (!isFavourite) && isFavourite !== 'false';
+  const restaurantId = self.restaurant.id;
+  const button = document.getElementById('mark-as-favourite');
+  const spinner = document.getElementById('favourite-spinner');
+  let failedUpdateCallback;
+  if (newIsFavourite) {
+    markRestaurantAsFavourite(button);
+    failedUpdateCallback = unmarkRestaurantAsFavourite;
+  } else {
+    unmarkRestaurantAsFavourite(button);
+    failedUpdateCallback = markRestaurantAsFavourite;
+  }
+  setMarkAsFavouriteFetchingState(button, spinner);
+  DBHelper.setRestaurantFavouriteStatus(restaurantId, newIsFavourite, (error, updatedRestaurant) => {
+    removeMarkAsFavouriteFetchingState(button, spinner);
+    if (!updatedRestaurant) {
+      console.error(error);
+      failedUpdateCallback(button);
+      return;
+    }
+    self.restaurant = updatedRestaurant;
+  });
+}
