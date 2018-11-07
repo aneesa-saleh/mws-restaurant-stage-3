@@ -54,6 +54,7 @@ class DBHelper {
         if (idbRestaurants && idbRestaurants.length > 0) {
           return idbRestaurants;
         }
+        // if IDB.restaurants is empty, return the fetch response instead
         return fetchResponse;
       });
     });
@@ -106,11 +107,11 @@ class DBHelper {
   /**
    * Fetch reviews by restaurant ID.
    */
-  static fetchReviewsByRestaurantId(id, callback) {
+  static fetchReviewsByRestaurantId(restaurantId, callback) {
     dbPromise.then((db) => {
-      const reviewsByRestaurantIdURL = `${DBHelper.DATABASE_URL}/reviews/?restaurant_id=${id}`;
+      const reviewsByRestaurantIdURL = `${DBHelper.DATABASE_URL}/reviews/?restaurant_id=${restaurantId}`;
 
-      // if (!db) {
+      if (!db) {
         // make regular fetch call
         return fetch(reviewsByRestaurantIdURL)
           .then((response) => {
@@ -120,28 +121,35 @@ class DBHelper {
             }
             return response.json();
           });
-      // }
+      }
 
-      // // return restaurant from IDB
-      // let store = db.transaction('restaurants').objectStore('restaurants');
-      // // id comes as a string from the url, convert to a number before lookup
-      // return store.get(Number.parseInt(id, 10)).then((idbRestaurant) => {
-      //   const fetchResponse = fetch(restaurantByIdURL)
-      //     .then((response) => {
-      //       if (!response.ok) {
-      //         const error = (`Request failed. Returned status of ${response.status}`);
-      //         return Promise.reject(error);
-      //       }
-      //       const responseJSON = response.clone().json();
-      //       // update IDB restaurants with fetch response even if value from IDB will be returned
-      //       responseJSON.then((fetchedRestaurant) => {
-      //         store = db.transaction('restaurants', 'readwrite').objectStore('restaurants');
-      //         store.put(fetchedRestaurant);
-      //       });
-      //       return response.json();
-      //     });
-      //   return idbRestaurant || fetchResponse;
-      // });
+      // return reviews from IDB
+      let store = db.transaction('reviews').objectStore('reviews');
+      let reviewsByRestaurantIdIndex = store.index('restaurant_id');
+      // id comes as a string from the url, convert to a number before lookup
+      return reviewsByRestaurantIdIndex.getAll(Number.parseInt(restaurantId, 10)).then((idbReviews) => {
+        const fetchResponse = fetch(reviewsByRestaurantIdURL)
+          .then((response) => {
+            if (!response.ok) {
+              const error = (`Request failed. Returned status of ${response.status}`);
+              return Promise.reject(error);
+            }
+            const responseJSON = response.clone().json();
+            // update IDB reviews with fetch response even if values from IDB will be returned
+            responseJSON.then((fetchedReviews) => {
+              store = db.transaction('reviews', 'readwrite').objectStore('reviews');
+              fetchedReviews.forEach((review) => {
+                store.put(review);
+              });
+            });
+            return response.json();
+          });
+        if (idbReviews && idbReviews.length > 0) {
+          return idbReviews;
+        }
+        // if IDB.reviews is empty, return the fetch response instead
+        return fetchResponse;
+      });
     }).then((reviews) => { callback(null, reviews); })
       .catch((error) => { callback(error, null); });
   }

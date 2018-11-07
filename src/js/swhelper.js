@@ -22,9 +22,17 @@ const cleanMapboxTilesCache = () => {
 const openDatabase = () => {
   if (!navigator.serviceWorker) return Promise.resolve();
 
-  return idb.open('restaurant-reviews', 1, (upgradeDb) => {
-    const store = upgradeDb.createObjectStore('restaurants', {
-      keyPath: 'id',
-    });
+  return idb.open('restaurant-reviews', 2, (upgradeDb) => {
+    switch(upgradeDb.oldVersion) {
+      case 0:
+        const restaurantsStore = upgradeDb.createObjectStore('restaurants', {
+          keyPath: 'id',
+        });
+      case 1:
+        const reviewsStore = upgradeDb.createObjectStore('reviews', {
+          keyPath: 'id',
+        });
+        reviewsStore.createIndex('restaurant_id', 'restaurant_id');
+    }
   });
 };
