@@ -184,6 +184,7 @@ const markRestaurantAsFavourite = (button) => {
   text.innerHTML = 'Unmark restaurant as favourite';
   icon.classList.add('fas', 'marked');
   icon.classList.remove('far', 'unmarked');
+  icon.setAttribute('aria-label', 'Restaurant is currently marked as favourite');
 };
 
 const unmarkRestaurantAsFavourite = (button) => {
@@ -192,6 +193,7 @@ const unmarkRestaurantAsFavourite = (button) => {
   text.innerHTML = 'Mark restaurant as favourite';
   icon.classList.add('far', 'unmarked');
   icon.classList.remove('fas', 'marked');
+  icon.setAttribute('aria-label', 'Restaurant is not currently marked as favourite');
 };
 
 /**
