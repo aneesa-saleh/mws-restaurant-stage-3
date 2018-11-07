@@ -279,7 +279,10 @@ class DBHelper {
       }
       return response.json();
     }).then((updatedRestaurant) => {
-      //update in service worker
+      dbPromise.then((db) => {
+        const store = db.transaction('restaurants', 'readwrite').objectStore('restaurants');
+        store.put(updatedRestaurant);
+      });
       callback(null, updatedRestaurant);
     }).catch((error) => {
       callback(error, null);
