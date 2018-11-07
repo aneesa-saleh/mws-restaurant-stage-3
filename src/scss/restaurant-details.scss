@@ -133,7 +133,7 @@ header {
 			letter-spacing: 5px;
 			text-transform: uppercase;
 
-			&:hover, &:active, &:focus {
+			&:active, &:focus {
 				color: #fff;
 				text-decoration: underline;
 			}
@@ -233,8 +233,6 @@ nav {
 
 	&:active,
 	&:focus {
-		-moz-box-shadow: 0 0 7px 5px rgba(255,255,255,0.89);
-		-webkit-box-shadow: 0 0 7px 5px rgba(255,255,255,0.89);
 		box-shadow: 0 0 7px 5px rgba(255,255,255,0.89);
 		color: white;
 		height: auto;
@@ -456,6 +454,67 @@ nav {
 	}
 }
 
+/***** reviews container *****/
+.reviews-heading-container {
+	position: relative;
+	width: 90%;
+	display: table;
+	margin: 0 auto;
+	margin-top: 10px;
+}
+
+.add-review {
+	min-width: 40px;
+	min-height: 40px;
+	font-size: 16px;
+	background-color: #333333;
+	color: white;
+	font-family: inherit;
+	padding: 5px 10px;
+	border: 0;
+	outline: 0;
+	border-radius: 3px;
+	cursor: pointer;
+	font-weight: 300;
+	float: right;
+
+	&:active, &:focus {
+		text-decoration: underline;
+	  box-shadow: 0px 0px 10px 2px #3b99fc;
+		background-color: #A36A00;
+		font-weight: normal;
+	}
+}
+
+.reviews-container h2 {
+	float: left;
+	margin-top: 5px;
+}
+
+@media screen and (min-width: 800px) {
+	.reviews-heading-container {
+		width: 85%;
+	}
+
+	.add-review {
+		position: absolute;
+		top: 0;
+		right: 0;
+		float: none;
+	}
+
+	.reviews-container h2 {
+		margin-top: 0;
+		float: none;
+	}
+}
+
+@media screen and (min-width: 900px) {
+	.reviews-heading-container {
+		width: 80%;
+	}
+}
+
 /***** reviews list *****/
 .reviews-container {
 	background-color: #f2f2f2;
@@ -470,6 +529,7 @@ nav {
 .reviews-list {
   margin: 0;
   padding: 0;
+	clear: both;
 }
 
 .review {
@@ -569,21 +629,19 @@ nav {
 	  cursor: pointer;
 	  font-family: Open-sans, sans-serif;
 	  font-size: 16px;
-	  -webkit-box-shadow: 0px 0px 4px 1px rgba(204,204,204,0.83);
-	  -moz-box-shadow: 0px 0px 4px 1px rgba(204,204,204,0.83);
 	  box-shadow: 0px 0px 4px 1px rgba(204,204,204,0.83);
 	  padding: 6px;
 	  border-radius: 2px;
+		background-color: white;
 
 		&:disabled {
 		  cursor: wait;
 		  opacity: 0.7;
 		}
 
-		&:focus, &:hover, &:active {
-		  -webkit-box-shadow: 0px 0px 4px 1px #a37904;
-		  -moz-box-shadow: 0px 0px 4px 1px #a37904;
-		  box-shadow: 0px 0px 10px 2px #a37904;
+		&:focus, &:active {
+		  box-shadow: 0px 0px 10px 2px #3b99fc;
+			text-decoration: underline;
 		}
 
 		.favourite-star {
@@ -625,4 +683,45 @@ nav {
 	.mark-as-favourite-container {
 		margin: 20px 0;
 	}
+}
+
+/***** modal *****/
+
+body.has-open-modal {
+  overflow: hidden;
+}
+
+.overlay {
+  position: fixed;
+  background-color: rgba(0,0,0,0.3);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2000;
+  overflow: auto;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  visibility: hidden;
+}
+
+.overlay.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.overlay-content {
+  background-color: white;
+  border: 1px solid gray;
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 20px;
+/*   bottom: 0;
+  top: 0; */
+  height: max-content;
+  overflow: auto;
 }

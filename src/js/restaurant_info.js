@@ -3,6 +3,7 @@ let reviews;
 let newMap;
 let matchesMediaQuery;
 const mediaQuery = '(min-width: 800px)';
+let previouslyFocusedElement;
 
 /**
  * Initialize map as soon as the page is loaded.
@@ -146,6 +147,9 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
   const accessibleRestaurantCuisine = document.getElementById('accessible-restaurant-cuisine');
   accessibleRestaurantCuisine.innerHTML = `Cuisine: ${restaurant.cuisine_type}`;
 
+  const addReviewButton = document.getElementById('add-review');
+  addReviewButton.setAttribute('aria-label', `Add a review for ${restaurant.name}`);
+
   // fill operating hours
   if (restaurant.operating_hours) {
     fillRestaurantHoursHTML();
@@ -233,9 +237,6 @@ const fetchReviews = () => {
  */
 const fillReviewsHTML = (reviews = self.reviews) => {
   const container = document.getElementById('reviews-container');
-  const title = document.createElement('h2');
-  title.innerHTML = 'Reviews';
-  container.appendChild(title);
 
   if (!reviews) {
     const noReviews = document.createElement('p');
