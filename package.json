@@ -38,7 +38,8 @@
   },
   "scripts": {
     "debug": "node debug app.js",
-    "start": "node app.js"
+    "start": "node app.js",
+    "gulp": "gulp"
   },
   "main": "app.js",
   "repository": {

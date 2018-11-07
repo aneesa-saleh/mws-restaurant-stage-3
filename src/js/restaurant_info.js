@@ -150,6 +150,10 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
   if (restaurant.operating_hours) {
     fillRestaurantHoursHTML();
   }
+
+  if (Object.hasOwnProperty.call(restaurant, 'is_favorite')) {
+    fillMarkAsFavouriteHTML();
+  }
 };
 
 /**
@@ -172,6 +176,35 @@ const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hour
       hours.appendChild(row);
     }
   }
+};
+
+const markRestaurantAsFavourite = (button) => {
+  var icon = button.querySelector('i');
+  var text = button.querySelector('span');
+  text.innerHTML = 'Unmark restaurant as favourite';
+  icon.classList.add('fas', 'marked');
+  icon.classList.remove('far', 'unmarked');
+};
+
+const unmarkRestaurantAsFavourite = (button) => {
+  var icon = button.querySelector('i');
+  var text = button.querySelector('span');
+  text.innerHTML = 'Mark restaurant as favourite';
+  icon.classList.add('far', 'unmarked');
+  icon.classList.remove('fas', 'marked');
+};
+
+/**
+ * Set state and text for mark as favourite button.
+ */
+const fillMarkAsFavouriteHTML = (isFavourite = self.restaurant.is_favorite) => {
+  const favouriteButton = document.getElementById('mark-as-favourite');
+  if (isFavourite) {
+    markRestaurantAsFavourite(favouriteButton);
+  } else {
+    unmarkRestaurantAsFavourite(favouriteButton);
+  }
+
 };
 
 /**

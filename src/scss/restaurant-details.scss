@@ -556,3 +556,73 @@ nav {
 .leaflet-container a {
     color: #005475 !important;
 }
+
+/***** mark as favourite *****/
+
+.mark-as-favourite-container {
+  width: fit-content;
+	margin: 20px 0 20px 20px;
+
+	.mark-as-favourite {
+	  border: none;
+	  outline: none;
+	  cursor: pointer;
+	  font-family: Open-sans, sans-serif;
+	  font-size: 16px;
+	  -webkit-box-shadow: 0px 0px 4px 1px rgba(204,204,204,0.83);
+	  -moz-box-shadow: 0px 0px 4px 1px rgba(204,204,204,0.83);
+	  box-shadow: 0px 0px 4px 1px rgba(204,204,204,0.83);
+	  padding: 6px;
+	  border-radius: 2px;
+
+		&:disabled {
+		  cursor: wait;
+		  opacity: 0.7;
+		}
+
+		&:focus, &:hover, &:active {
+		  -webkit-box-shadow: 0px 0px 4px 1px #a37904;
+		  -moz-box-shadow: 0px 0px 4px 1px #a37904;
+		  box-shadow: 0px 0px 10px 2px #a37904;
+		}
+
+		.favourite-star {
+		  font-size: 20px;
+
+			&.marked {
+			  color: #a37904;
+			}
+
+			&.unmarked {
+			  color: gray;
+			}
+		} /* .favourite-star */
+	} /* .mark-as-favourite */
+
+	.spinner {
+	  visibility: hidden;
+	  float: right;
+
+		&.show {
+		  visibility: visible;
+		}
+	} /* .spinner */
+} /* .mark-as-favourite-container */
+
+@media screen and (min-width: 400px) {
+	.mark-as-favourite-container {
+		margin: 20px 0 20px 30px;
+	}
+}
+
+@media screen and (min-width: 600px) {
+	.mark-as-favourite-container {
+		margin: 20px 0 20px 40px;
+	}
+}
+
+@media screen and (min-width: 800px) {
+	.mark-as-favourite-container {
+		margin: 20px 0;
+	}
+}

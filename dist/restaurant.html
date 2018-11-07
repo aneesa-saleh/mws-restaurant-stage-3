@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="css/restaurant-details.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="">
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
   <title>Restaurant Info</title>
   <!-- favicons -->
 	<meta name="msapplication-square70x70logo" content="img/favicon/windows-tile-70x70.png">
@@ -79,6 +80,17 @@
       </table>
     </section>
     <!-- end opening hours -->
+
+    <!-- Beginning mark as favourite -->
+    <div class="mark-as-favourite-container">
+      <button class="mark-as-favourite" type="button" onclick="toggleRestaurantAsFavourite(event)" id="mark-as-favourite">
+        <span class="mark-as-favourite-text"></span>
+        <i class="fa-star favourite-star"></i>
+      </button>
+      <img src="/img/spinner.gif" id="spinner" class="spinner">
+    </div>
+    <!-- End mark as favourite -->
+
     <!-- Beginning reviews -->
     <section id="reviews-container" class="reviews-container">
       <div id="reviews-list"></ul>

@@ -58,6 +58,11 @@ gulp.task('copy-svg', () => {
     .pipe(gulp.dest('dist/img'));
 });
 
+gulp.task('copy-gif', () => {
+  gulp.src('src/img/*.gif')
+    .pipe(gulp.dest('dist/img'));
+});
+
 gulp.task('sw', () => {
   gulp.src('src/service-worker.js')
     .pipe(sourcemaps.init())
@@ -110,4 +115,4 @@ gulp.task('dist', [
   'scripts-dist',
 ]);
 
-gulp.task('default', ['grunt-imgs', 'copy-html', 'copy-manifest', 'sw', 'copy-svg', 'styles', 'scripts', 'serve']);
+gulp.task('default', ['grunt-imgs', 'copy-html', 'copy-manifest', 'sw', 'copy-svg', 'copy-gif', 'styles', 'scripts', 'serve']);

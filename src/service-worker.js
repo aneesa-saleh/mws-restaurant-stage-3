@@ -1,4 +1,4 @@
-const staticCacheName = 'restaurant-reviews-static-v2';
+const staticCacheName = 'restaurant-reviews-static-v1';
 const restaurantImagesCache = 'restaurant-reviews-restaurant-images';
 const mapboxTilesCache = 'restaurant-reviews-map-tiles';
 const allCaches = [
@@ -20,7 +20,9 @@ self.addEventListener('install', (event) => {
       '/js/restaurant_info.js',
       '/img/offline.svg',
       '/img/offline_wide.svg',
+      '/img/spinner.gif',
       'https://cdn.rawgit.com/jakearchibald/idb/master/lib/idb.js',
+      'https://use.fontawesome.com/releases/v5.5.0/css/all.css',
       'https://unpkg.com/leaflet@1.3.1/dist/leaflet.css',
       'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js',
       'https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700',
@@ -96,6 +98,7 @@ const serveMapboxTiles = request => caches.open(mapboxTilesCache).then(
   cache => cache.match(request.url).then((response) => {
     if (response) return response;
 
+    // if request isn't cached, cache it when fetch response is returned
     return fetch(request).then((networkResponse) => {
       cache.put(request.url, networkResponse.clone());
       return networkResponse;
