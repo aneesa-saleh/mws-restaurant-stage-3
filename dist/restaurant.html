@@ -95,7 +95,7 @@
     <section id="reviews-container" class="reviews-container">
       <div class="reviews-heading-container">
         <h2>Reviews</h2>
-        <button type="button" class="add-review" id="add-review" onclick="openModal()">Add Review</button>
+        <button type="button" class="add-review-button" id="add-review-button" onclick="openModal()">Add Review</button>
       </div>
       <div id="reviews-list" class="reviews-list"></div>
     </section>
@@ -110,13 +110,33 @@
   <!-- End footer -->
 
   <!-- Beginning modal -->
-  <div class="overlay">
+  <div class="overlay show">
     <div class="overlay-content">
-      <button onclick="closeModal()">Close</button>
-      <button type="button">Button 1</button>
-      <button type="button">Button 2</button>
-      <button type="button">Button 3</button>
-      <input type="text">
+      <h2 class="overlay-heading" id="add-review-overlay-heading">Add Review</h2>
+      <form class="overlay-form">
+        <div class="form-group">
+          <label for="name">
+            Name
+            <input id="name" type="text">
+          </label>
+        </div>
+        <div class="form-group">
+          <label for="rating">Restaurant rating<br/>
+            <input id="rating" type="range" min=0 max=5 step=1 value=0 onchange="handleRangeChange(event)">
+          </label>
+          <span class="rating-value">0.0</span>
+        </div>
+        <div class="form-group">
+          <label for="comment">
+            Comment
+            <textarea id="comment"></textarea>
+          </label>
+        </div>
+        <div class="form-button-container">
+          <button class="form-button" type="button" onclick="closeModal()">Add Review</button>
+          <button class="form-button right-button mild" type="button" onclick="closeModal()">Cancel</button>
+        </div>
+      </form>
     </div>
   </div>
   <!-- End modal -->
@@ -134,7 +154,7 @@
   <!-- Main javascript file -->
   <script src="js/restaurant_info.js"></script>
   <!-- Modal functions -->
-  <script src="js/modal.js"></script>
+  <script src="js/addReviewModal.js"></script>
   <!-- End scripts -->
 
 </body>

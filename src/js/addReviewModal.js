@@ -33,3 +33,8 @@ function trapTabKey(event) {
     }
   }
 }
+
+function handleRangeChange(event) {
+  var ratingValue = document.querySelector('.rating-value');
+  ratingValue.innerHTML = `${event.target.value}.0`;
+}

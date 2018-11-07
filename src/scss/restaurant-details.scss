@@ -463,7 +463,7 @@ nav {
 	margin-top: 10px;
 }
 
-.add-review {
+.add-review-button {
 	min-width: 40px;
 	min-height: 40px;
 	font-size: 16px;
@@ -496,7 +496,7 @@ nav {
 		width: 85%;
 	}
 
-	.add-review {
+	.add-review-button {
 		position: absolute;
 		top: 0;
 		right: 0;
@@ -700,7 +700,7 @@ body.has-open-modal {
   right: 0;
   z-index: 2000;
   overflow: auto;
-  padding: 20px;
+  padding: 10px;
   opacity: 0;
   transition: opacity 0.3s ease, visibility 0.3s ease;
   visibility: hidden;
@@ -713,15 +713,239 @@ body.has-open-modal {
 
 .overlay-content {
   background-color: white;
-  border: 1px solid gray;
+  box-shadow: 0px 0px 4px 1px rgba(150, 150, 150, 0.83);
   position: absolute;
-  left: 10px;
-  right: 10px;
-  max-width: 500px;
-  margin: 20px auto;
-  padding: 20px;
-/*   bottom: 0;
-  top: 0; */
+  max-width: 85%;
+	left: 0;
+	right: 0;
+  margin: auto;
+  padding: 20px 10px;
+	bottom: auto;
+  top: 10%;
   height: max-content;
   overflow: auto;
+	border-radius: 5px;
+	margin-bottom: 20px;
+}
+
+@media screen and (min-width: 400px) {
+	.overlay-content {
+		max-width: 80%;
+		padding: 20px;
+	}
+}
+
+@media screen and (min-width: 550px) {
+	.overlay-content {
+		max-width: 450px;
+	}
+}
+
+/***** overlay form *****/
+
+.overlay-form {
+	padding: 10px;
+
+	label {
+		font-size: 18px;
+	}
+
+	input[type="text"], textarea {
+		display: block;
+		margin-top: 10px;
+		width: 95%;
+		border: 1px solid lightgray;
+		border-radius: 5px;
+		font-size: 16px;
+		font-family: inherit;
+		padding: 5px;
+	}
+
+	textarea {
+		height: 100px;
+		resize: vertical;
+	}
+}
+
+.overlay-heading {
+	font-size: 22px;
+	font-weight: 300;
+	margin: 0;
+}
+
+.form-group {
+	margin-bottom: 20px;
+}
+
+.form-button-container {
+	float: right;
+}
+
+.form-button {
+	padding: 5px 15px;
+	min-width: 40px;
+	min-height: 40px;
+	font-size: 16px;
+	background-color: #333333;
+	color: white;
+	font-family: inherit;
+	border: 0;
+	outline: 0;
+	border-radius: 3px;
+	cursor: pointer;
+	font-weight: 300;
+
+	&:active, &:focus {
+		text-decoration: underline;
+	  box-shadow: 0px 0px 10px 2px #3b99fc;
+		background-color: #A36A00;
+		font-weight: normal;
+	}
+}
+
+.form-button.right-button {
+	margin-left: 20px;
+}
+
+.form-button.mild {
+	color: black;
+	background-color: #f2f2f2;
+
+	&:active, &:focus {
+		background-color: #A36A00;
+		color: white;
+	}
+}
+
+@media screen and (min-width: 550px) {
+	.overlay-heading {
+		margin: 10px;
+		font-size: 24px;
+	}
+}
+
+/***** restaurant rating *****/
+// https://codepen.io/camstephensdomo/pen/pxzmZX
+
+.rating-value {
+  padding: 5px 10px;
+  border-radius: 2px;
+  color: white;
+  background-color: #a37904;
+}
+
+.favourite-icon {
+  color: #a37904;
+  font-size: 26px;
+}
+
+input[type="range"] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: calc(100% - 50px); /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type="range"]:focus {
+  outline: none;
+  box-shadow: 0px 0px 11px 2px rgba(124,91,0,0.72);
+}
+
+input[type="range"]::-ms-track {
+  width: 100%;
+  cursor: pointer;
+
+  /* Hides the slider so custom styles can be added */
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+/***** slider thumb *****/
+
+input[type="range"]::-webkit-slider-thumb,
+{
+  -webkit-appearance: none;
+  background: #a37904;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  height: 16px;
+  margin-top: -6px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+  width: 16px;
+}
+
+/* All the same stuff for Firefox */
+input[type="range"]::-moz-range-thumb {
+  border: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #a37904;
+  cursor: pointer;
+}
+
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+  border: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #a37904;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb:focus {
+  display: none;
+}
+
+// /////////// TRACK ///////////////////
+
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  background: #E6E6E6;
+  border-radius: 5px;
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: #E6E6E6;
+  border-radius: 2px;
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  // background: transparent;
+  border-color: transparent;
+  border-width: 16px 0; // @TODO not sure what this is
+}
+
+input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: #E6E6E6;
+  border-radius: 2px;
+}
+
+input[type="range"]::-ms-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  border-width: 16px 0; // @TODO not sure what this is
+  color: transparent;
+}
+
+input[type="range"]::-ms-fill-lower {
+  background: #E6E6E6;
+  border-radius: 4px;
+}
+
+input[type="range"]::-ms-fill-upper {
+  background: #E6E6E6;
+  border-radius: 4px;
 }

@@ -147,8 +147,11 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
   const accessibleRestaurantCuisine = document.getElementById('accessible-restaurant-cuisine');
   accessibleRestaurantCuisine.innerHTML = `Cuisine: ${restaurant.cuisine_type}`;
 
-  const addReviewButton = document.getElementById('add-review');
+  const addReviewButton = document.getElementById('add-review-button');
   addReviewButton.setAttribute('aria-label', `Add a review for ${restaurant.name}`);
+
+  const addReviewOverlayHeading = document.getElementById('add-review-overlay-heading');
+  addReviewOverlayHeading.innerHTML = `Add review for ${restaurant.name}`;
 
   // fill operating hours
   if (restaurant.operating_hours) {
