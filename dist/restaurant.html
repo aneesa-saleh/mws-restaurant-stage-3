@@ -110,30 +110,33 @@
   <!-- End footer -->
 
   <!-- Beginning modal -->
-  <div class="overlay show">
+  <div class="overlay">
     <div class="overlay-content">
-      <h2 class="overlay-heading" id="add-review-overlay-heading">Add Review</h2>
+      <h2 class="overlay-heading" id="add-review-overlay-heading" disabled="true">Add Review</h2>
       <form class="overlay-form">
         <div class="form-group">
           <label for="name">
             Name
-            <input id="name" type="text">
+            <input id="name" onblur="handleNameInputBlur()" type="text" aria-required="true" aria-invalid="false">
           </label>
+          <span id="name-error" class="form-error">Enter your name</span>
         </div>
         <div class="form-group">
           <label for="rating">Restaurant rating<br/>
-            <input id="rating" type="range" min=0 max=5 step=1 value=0 onchange="handleRangeChange(event)">
+            <input id="rating" type="range" min=0 max=5 step=1 value=0 onchange="handleRangeChange(event)" onblur="handleRatingInputBlur()" aria-required="true" aria-invalid="false">
           </label>
           <span class="rating-value">0.0</span>
+          <span id="rating-error" class="form-error">Choose a restaurant rating</span>
         </div>
         <div class="form-group">
           <label for="comment">
             Comment
-            <textarea id="comment"></textarea>
+            <textarea id="comment" onblur="handleCommentInputBlur()" aria-required="true" aria-invalid="false"></textarea>
           </label>
+          <span id="comment-error" class="form-error">Enter a comment</span>
         </div>
         <div class="form-button-container">
-          <button class="form-button" type="button" onclick="closeModal()">Add Review</button>
+          <button class="form-button" type="button" onclick="handleAddReviewSubmit()">Add Review</button>
           <button class="form-button right-button mild" type="button" onclick="closeModal()">Cancel</button>
         </div>
       </form>

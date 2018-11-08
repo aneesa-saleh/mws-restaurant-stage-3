@@ -149,6 +149,7 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
 
   const addReviewButton = document.getElementById('add-review-button');
   addReviewButton.setAttribute('aria-label', `Add a review for ${restaurant.name}`);
+  addReviewButton.removeAttribute('disabled';)
 
   const addReviewOverlayHeading = document.getElementById('add-review-overlay-heading');
   addReviewOverlayHeading.innerHTML = `Add review for ${restaurant.name}`;

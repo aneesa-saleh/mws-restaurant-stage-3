@@ -1,5 +1,7 @@
 @charset "utf-8";
 
+$red: #CC0000;
+
 body,
 html {
 	height: 100%;
@@ -486,6 +488,11 @@ nav {
 	}
 }
 
+.add-review-button[disabled="true"] {
+	cursor: not-allowed;
+	background-color: #4c4c4c;
+}
+
 .reviews-container h2 {
 	float: left;
 	margin-top: 5px;
@@ -737,7 +744,8 @@ body.has-open-modal {
 
 @media screen and (min-width: 550px) {
 	.overlay-content {
-		max-width: 450px;
+		max-width: 400px;
+		padding: 30px;
 	}
 }
 
@@ -841,7 +849,7 @@ body.has-open-modal {
 
 input[type="range"] {
   -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
-  width: calc(100% - 50px); /* Specific width is required for Firefox. */
+  width: calc(100% - 70px); /* Specific width is required for Firefox. */
   background: transparent; /* Otherwise white in Chrome */
 }
 
@@ -948,4 +956,18 @@ input[type="range"]::-ms-fill-lower {
 input[type="range"]::-ms-fill-upper {
   background: #E6E6E6;
   border-radius: 4px;
+}
+
+/***** error *****/
+input[type="text"].has-error, input[type="range"].has-error, textarea.has-error {
+	border: 1px solid $red;
+}
+
+.form-error {
+	display: none;
+	color: $red;
+}
+
+.form-error.show {
+	display: block;
 }
