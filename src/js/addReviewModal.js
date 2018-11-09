@@ -166,12 +166,18 @@ function clearForm() {
   document.getElementById('comment').value = '';
 }
 
-function handleAddReviewSubmit(){
+function handleAddReviewSubmit() {
   const allInputsValid = validateAllInputs();
   if (allInputsValid) {
-    const values = getFormInputValues();
-    console.log({ ...values, restaurant_id: self.restaurant.id });
-    closeModal();
-    clearForm();
+    const { name, rating, comment } = getFormInputValues();
+    DBHelper.addReview(self.restaurant.id, name, rating, comment, (error, newReview) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(newReview);
+      }
+      closeModal();
+      clearForm();
+    });
   }
 }

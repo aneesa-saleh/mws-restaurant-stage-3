@@ -288,4 +288,24 @@ class DBHelper {
       callback(error, null);
     });
   }
+
+  static addReview(restaurant_id, name, rating, comments, callback) {
+    const addReviewUrl = `${DBHelper.DATABASE_URL}/reviews`;
+    const body = JSON.stringify({
+      restaurant_id,
+      name,
+      rating,
+      comments,
+    });
+    fetch(addReviewUrl, { method: 'POST', body }).then((response) => {
+      if(!response.ok) {
+        return Promise.reject();
+      }
+      return response.json();
+    }).then((newReview) => {
+      callback(null, newReview);
+    }).catch((error) => {
+      callback(error, null);
+    });
+  }
 }
