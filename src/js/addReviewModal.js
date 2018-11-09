@@ -75,17 +75,17 @@ function clearRatingInputError() {
 }
 
 function setCommentInputError() {
-  const commentInput = document.getElementById('comment');
-  const commentInputError = document.getElementById('comment-error');
+  const commentInput = document.getElementById('comments');
+  const commentInputError = document.getElementById('comments-error');
   commentInput.classList.add('has-error');
   commentInput.setAttribute('aria-invalid', 'true');
-  commentInput.setAttribute('aria-describedby', 'comment-error');
+  commentInput.setAttribute('aria-describedby', 'comments-error');
   commentInputError.classList.add('show');
 }
 
 function clearCommentInputError() {
-  const commentInput = document.getElementById('comment');
-  const commentInputError = document.getElementById('comment-error');
+  const commentInput = document.getElementById('comments');
+  const commentInputError = document.getElementById('comments-error');
   commentInput.classList.remove('has-error');
   commentInput.removeAttribute('aria-invalid');
   commentInput.removeAttribute('aria-describedby');
@@ -101,7 +101,7 @@ const errorFunctions = {
     setError: setRatingInputError,
     clearError: clearRatingInputError,
   },
-  comment: {
+  comments: {
     setError: setCommentInputError,
     clearError: clearCommentInputError,
   }
@@ -123,7 +123,7 @@ function validateInput(id) {
 
 function validateAllInputs() {
   let allInputsValid = true;
-  const inputIds = ['name', 'rating', 'comment'];
+  const inputIds = ['name', 'rating', 'comments'];
   inputIds.forEach((id) => {
     const inputValid = validateInput(id);
     allInputsValid = allInputsValid && inputValid;
@@ -147,11 +147,11 @@ function handleRatingInputBlur() {
 }
 
 function handleCommentInputBlur() {
-  validateInput('comment');
+  validateInput('comments');
 }
 
 function getFormInputValues() {
-  const inputIds = ['name', 'rating', 'comment'];
+  const inputIds = ['name', 'rating', 'comments'];
   const values = {};
   inputIds.forEach((id) => {
     values[id] = document.getElementById(id).value;
@@ -163,18 +163,18 @@ function clearForm() {
   document.getElementById('name').value = '';
   document.getElementById('rating').value = '0';
   document.querySelector('.rating-value').innerHTML = '0.0';
-  document.getElementById('comment').value = '';
+  document.getElementById('comments').value = '';
 }
 
 function handleAddReviewSubmit() {
   const allInputsValid = validateAllInputs();
   if (allInputsValid) {
-    const { name, rating, comment } = getFormInputValues();
-    if (navigator.serviceWorker) { // perform regular fetch and regular updates
+    const { name, rating, comments } = getFormInputValues();
+    if (!navigator.serviceWorker) { // perform regular fetch and regular updates
       const submitButton = document.getElementById('add-review-submit');
       submitButton.setAttribute('disabled', true);
       submitButton.setAttribute('aria-busy', 'true');
-      DBHelper.addReview(self.restaurant.id, name, rating, comment, (error, newReview) => {
+      DBHelper.addReview(self.restaurant.id, name, rating, comments, (error, newReview) => {
         submitButton.removeAttribute('disabled');
         submitButton.setAttribute('aria-busy', 'false');
         if (error) {
@@ -184,12 +184,16 @@ function handleAddReviewSubmit() {
           // TODO: toast success
           const ul = document.getElementById('reviews-list');
           ul.appendChild(createReviewHTML(newReview));
+          closeModal();
+          clearForm();
         }
-        closeModal();
-        clearForm();
       });
     } else {
-
+      const requestId = `${self.restaurant.id}-${Date.now()}`;
+      const ul = document.getElementById('reviews-list');
+      ul.appendChild(createReviewHTML({ name, rating, comments }, true, requestId));
+      closeModal();
+      clearForm();
     }
   }
 }

@@ -149,7 +149,7 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
 
   const addReviewButton = document.getElementById('add-review-button');
   addReviewButton.setAttribute('aria-label', `Add a review for ${restaurant.name}`);
-  addReviewButton.removeAttribute('disabled';)
+  addReviewButton.removeAttribute('disabled');
 
   const addReviewOverlayHeading = document.getElementById('add-review-overlay-heading');
   addReviewOverlayHeading.innerHTML = `Add review for ${restaurant.name}`;
@@ -258,7 +258,7 @@ const fillReviewsHTML = (reviews = self.reviews) => {
 /**
  * Create review HTML and add it to the webpage.
  */
-const createReviewHTML = (review) => {
+const createReviewHTML = (review, sending, requestId) => {
   const article = document.createElement('article');
   article.className = 'review';
 
@@ -271,8 +271,19 @@ const createReviewHTML = (review) => {
   headerSpan.appendChild(name);
 
   const date = document.createElement('p');
-  const dateText = formatDate(new Date(review.updatedAt));
-  date.innerHTML = dateText;
+
+  if (sending) {
+    const icon = document.createElement('i');
+    icon.classList.add('far', 'fa-clock');
+    const loadingText = document.createElement('span');
+    loadingText.innerHTML = 'Sending';
+    date.appendChild(icon);
+    date.appendChild(loadingText);
+  } else {
+    const dateText = formatDate(new Date(review.updatedAt));
+    date.innerHTML = dateText;
+  }
+
   date.className = 'review-date';
   headerSpan.appendChild(date);
   article.appendChild(headerSpan);
@@ -289,6 +300,12 @@ const createReviewHTML = (review) => {
   comments.innerHTML = review.comments;
   contentSpan.appendChild(comments);
   article.appendChild(contentSpan);
+
+  if (sending) {
+    article.setAttribute('data-id', requestId);
+    article.setAttribute('aria-busy', 'true');
+    article.classList.add('sending');
+  }
 
   return article;
 };

@@ -550,6 +550,10 @@ nav {
 	position: relative;
 	width: 90%;
 
+	&.sending {
+		opacity: 0.8;
+	}
+
 	p {
 	  margin: 0 0 10px;
 	}
@@ -579,6 +583,10 @@ nav {
 	float: right;
 	font-size: 11pt;
 	font-weight: 200;
+
+	span {
+		margin-left: 5px;
+	}
 }
 
 .review-rating {
