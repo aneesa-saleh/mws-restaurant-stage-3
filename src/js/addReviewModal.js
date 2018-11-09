@@ -170,14 +170,26 @@ function handleAddReviewSubmit() {
   const allInputsValid = validateAllInputs();
   if (allInputsValid) {
     const { name, rating, comment } = getFormInputValues();
-    DBHelper.addReview(self.restaurant.id, name, rating, comment, (error, newReview) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(newReview);
-      }
-      closeModal();
-      clearForm();
-    });
+    if (navigator.serviceWorker) { // perform regular fetch and regular updates
+      const submitButton = document.getElementById('add-review-submit');
+      submitButton.setAttribute('disabled', true);
+      submitButton.setAttribute('aria-busy', 'true');
+      DBHelper.addReview(self.restaurant.id, name, rating, comment, (error, newReview) => {
+        submitButton.removeAttribute('disabled');
+        submitButton.setAttribute('aria-busy', 'false');
+        if (error) {
+          // TODO: toast error
+          console.log(error);
+        } else {
+          // TODO: toast success
+          const ul = document.getElementById('reviews-list');
+          ul.appendChild(createReviewHTML(newReview));
+        }
+        closeModal();
+        clearForm();
+      });
+    } else {
+
+    }
   }
 }
