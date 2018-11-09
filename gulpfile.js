@@ -26,7 +26,7 @@ gulp.task('serve', ['styles'], () => {
 
   browserSync.init({
     server: 'dist',
-    port: 8002,
+    port: 8003,
   });
 });
 

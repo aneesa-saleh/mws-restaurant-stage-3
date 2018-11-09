@@ -1,5 +1,6 @@
 let restaurant;
 let reviews;
+let outboxReviews;
 let newMap;
 let matchesMediaQuery;
 const mediaQuery = '(min-width: 800px)';
@@ -98,7 +99,7 @@ const fetchRestaurantFromURL = (callback) => {
     callback(null, self.restaurant);
     return;
   }
-  const id = getParameterByName('id');
+  const id = getUrlParam('id');
   if (!id) { // no id found in URL
     error = 'No restaurant id in URL';
     callback(error, null);
@@ -234,7 +235,7 @@ const fillMarkAsFavouriteHTML = (isFavourite = self.restaurant.is_favorite) => {
  * Get current restaurant from page URL.
  */
 const fetchReviews = () => {
-  const id = getParameterByName('id');
+  const id = getUrlParam('id');
   if (!id) { // no id found in URL
     console.log('No restaurant id in URL');
   } else {
@@ -245,6 +246,15 @@ const fetchReviews = () => {
         return;
       }
       fillReviewsHTML();
+      DBHelper.getOutboxReviews(id, (error, outboxReviews) => {
+        if (error) {
+          console.log(error);
+          return;
+        } else {
+          self.outboxReviews = outboxReviews;
+          fillSendingReviewsHTML();
+        }
+      })
     });
   }
 };
@@ -253,9 +263,7 @@ const fetchReviews = () => {
  * Create all reviews HTML and add them to the webpage.
  */
 const fillReviewsHTML = (reviews = self.reviews) => {
-  const container = document.getElementById('reviews-container');
-
-  if (!reviews) {
+  if (!reviews || reviews.length === 0) {
     const noReviews = document.createElement('p');
     noReviews.innerHTML = 'No reviews yet!';
     container.appendChild(noReviews);
@@ -265,7 +273,16 @@ const fillReviewsHTML = (reviews = self.reviews) => {
   reviews.forEach((review) => {
     ul.appendChild(createReviewHTML(review));
   });
-  container.appendChild(ul);
+};
+
+const fillSendingReviewsHTML = (outboxReviews = self.outboxReviews) => {
+  if (!outboxReviews || outboxReviews.length === 0) return;
+
+  const ul = document.getElementById('reviews-list');
+  outboxReviews.forEach((outboxReview) => {
+    const { request_id, ...review } = outboxReview;
+    ul.appendChild(createReviewHTML(review, true, request_id));
+  });
 };
 
 /**
@@ -366,7 +383,7 @@ const fillBreadcrumb = (restaurant = self.restaurant) => {
 /**
  * Get a parameter by name from page URL.
  */
-const getParameterByName = (name, url) => {
+const getUrlParam = (name, url) => {
   url = url || window.location.href;
   name = name.replace(/[\[\]]/g, '\\$&');
   const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);

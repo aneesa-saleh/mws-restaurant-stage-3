@@ -309,4 +309,19 @@ class DBHelper {
       callback(error, null);
     });
   }
+
+  static getOutboxReviews(restaurantId, callback) {
+    dbPromise.then((db) => {
+      if (!db) {
+        const error = 'Error connecting to IndexedDB';
+        callback(error, null);
+      }
+      let store = db.transaction('outbox').objectStore('outbox');
+      let reviewsByRestaurantIdIndex = store.index('restaurant_id');
+      // id comes as a string from the url, convert to a number before lookup
+      reviewsByRestaurantIdIndex.getAll(Number.parseInt(restaurantId, 10)).then((idbReviews) => {
+        callback(null, idbReviews);
+      });
+    })
+  }
 }
