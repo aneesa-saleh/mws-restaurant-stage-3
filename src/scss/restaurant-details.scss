@@ -579,10 +579,14 @@ nav {
 }
 
 .review-date {
-	color: white !important;
+	color: white;
 	float: right;
 	font-size: 11pt;
 	font-weight: 200;
+
+	&.error {
+		color: #edd89c;
+	}
 
 	span {
 		margin-left: 5px;

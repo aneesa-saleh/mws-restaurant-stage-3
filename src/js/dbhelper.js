@@ -299,7 +299,8 @@ class DBHelper {
     });
     fetch(addReviewUrl, { method: 'POST', body }).then((response) => {
       if(!response.ok) {
-        return Promise.reject();
+        const error = (`Request failed. Returned status of ${response.status}`);
+        return Promise.reject(error);
       }
       return response.json();
     }).then((newReview) => {

@@ -19,13 +19,13 @@ const cleanMapboxTilesCache = () => {
   );
 };
 
-const openDatabase = () => {
-  if (!navigator.serviceWorker) return Promise.resolve();
+const openDatabase = (requestFromServiceWorker) => {
+  if (!navigator.serviceWorker && !requestFromServiceWorker) return Promise.resolve();
 
-  return idb.open('restaurant-reviews', 2, (upgradeDb) => {
+  return idb.open('restaurant-reviews', 3, (upgradeDb) => {
     switch(upgradeDb.oldVersion) {
       case 0:
-        const restaurantsStore = upgradeDb.createObjectStore('restaurants', {
+        upgradeDb.createObjectStore('restaurants', {
           keyPath: 'id',
         });
       case 1:
@@ -33,6 +33,10 @@ const openDatabase = () => {
           keyPath: 'id',
         });
         reviewsStore.createIndex('restaurant_id', 'restaurant_id');
+      case 2:
+        upgradeDb.createObjectStore('outbox', {
+          keyPath: 'request_id',
+        });
     }
   });
 };

@@ -1,3 +1,5 @@
+importScripts('/js/swhelper.js', '/js/dbhelper.js', 'https://cdn.jsdelivr.net/npm/idb@2.1.3/lib/idb.min.js');
+
 const staticCacheName = 'restaurant-reviews-static-v5';
 const restaurantImagesCache = 'restaurant-reviews-restaurant-images';
 const mapboxTilesCache = 'restaurant-reviews-map-tiles';
@@ -41,6 +43,67 @@ self.addEventListener('activate', (event) => {
         cacheName.startsWith('restaurant-reviews-') && !allCaches.includes(cacheName)
       )).map(cacheName => caches.delete(cacheName)),
     )).catch(error => console.log(error)),
+  );
+
+  self.clients.claim();
+});
+
+const dbPromise = openDatabase(true);
+
+self.addEventListener('message', (event) => {
+  if (event.data.type === 'post-review') {
+    const { review, requestId } = event.data;
+    dbPromise.then((db) => {
+      const outboxStore = db.transaction('outbox', 'readwrite').objectStore('outbox');
+      outboxStore.put({ ...review, request_id: requestId });
+      self.registration.sync.register(requestId);
+    });
+  }
+});
+
+self.addEventListener('sync', function (event) {
+  event.waitUntil(
+    dbPromise.then((db) => {
+      const requestId = event.tag;
+      let outboxStore = db.transaction('outbox').objectStore('outbox');
+      outboxStore.get(requestId).then((request) => {
+        const { restaurant_id, name, rating, comments } = request;
+        return DBHelper.addReview(restaurant_id, name, rating, comments, (error, newReview) => {
+          if (error) {
+            // broadcast update to all clients
+            self.clients.matchAll().then((clients) => {
+              clients.forEach((client) => {
+                  client.postMessage({
+                    type: 'update-review',
+                    error: true,
+                    requestId,
+                  });
+              });
+            });
+            // delete review from outbox store
+            outboxStore = db.transaction('outbox', 'readwrite').objectStore('outbox');
+            outboxStore.delete(requestId);
+          } else {
+            // broadcast update to all clients
+            self.clients.matchAll().then((clients) => {
+              clients.forEach((client) => {
+                  client.postMessage({
+                    type: 'update-review',
+                    review: newReview,
+                    requestId,
+                  });
+              });
+            });
+            // add review to reviews store
+            const reviewsStore = db.transaction('reviews', 'readwrite').objectStore('reviews');
+            reviewsStore.put(newReview);
+            // delete review from outbox store
+            outboxStore = db.transaction('outbox', 'readwrite').objectStore('outbox');
+            outboxStore.delete(requestId);
+          }
+        })
+      })
+    })
   );
 });
 

@@ -170,7 +170,7 @@ function handleAddReviewSubmit() {
   const allInputsValid = validateAllInputs();
   if (allInputsValid) {
     const { name, rating, comments } = getFormInputValues();
-    if (!navigator.serviceWorker) { // perform regular fetch and regular updates
+    if ((!navigator.serviceWorker) || (!navigator.serviceWorker.controller)) { // perform regular fetch and regular updates
       const submitButton = document.getElementById('add-review-submit');
       submitButton.setAttribute('disabled', true);
       submitButton.setAttribute('aria-busy', 'true');
@@ -190,10 +190,16 @@ function handleAddReviewSubmit() {
       });
     } else {
       const requestId = `${self.restaurant.id}-${Date.now()}`;
+      const newReview = { name, rating, comments, restaurant_id: self.restaurant.id };
       const ul = document.getElementById('reviews-list');
-      ul.appendChild(createReviewHTML({ name, rating, comments }, true, requestId));
+      ul.appendChild(createReviewHTML(newReview, true, requestId));
       closeModal();
       clearForm();
+      navigator.serviceWorker.controller.postMessage({
+        type: 'post-review',
+        review: newReview,
+        requestId,
+      });
     }
   }
 }

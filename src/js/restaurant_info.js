@@ -17,6 +17,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
   updateRestaurantContainerAria(); // set initial aria values
   registerServiceWorker();
   setInterval(cleanMapboxTilesCache, 5000);
+
+  if (navigator.serviceWorker) {
+    navigator.serviceWorker.addEventListener('message', (event) => {
+      const { type, requestId, review, error } = event.data;
+      if (type === 'update-review') {
+        if (error) {
+          updateReviewHTML(true, requestId);
+        } else {
+          updateReviewHTML(false, requestId, review);
+        }
+      }
+    })
+  }
 });
 
 /**
@@ -309,6 +322,36 @@ const createReviewHTML = (review, sending, requestId) => {
 
   return article;
 };
+
+const updateReviewHTML = (error, requestId, review) => {
+  const reviewElement = document.querySelector(`[data-id="${requestId}"]`);
+  if (error) {
+    if (reviewElement) { // for error, no need to add to UI if it doesn't exist
+      reviewElement.classList.remove('sending');
+      const date = reviewElement.querySelector('.review-date');
+      date.innerHTML = '';
+      const icon = document.createElement('i');
+      icon.classList.add('fas', 'fa-exclamation-triangle');
+      const errorText = document.createElement('span');
+      errorText.innerHTML = 'Sending failed';
+      date.appendChild(icon);
+      date.appendChild(errorText);
+      date.classList.add('error');
+    }
+  } else {
+    const ul = document.getElementById('reviews-list');
+    if (ul && self.restaurant) { // only update if the restaurant is loaded
+      if (reviewElement) {
+        reviewElement.classList.remove('sending');
+        const date = reviewElement.querySelector('.review-date');
+        const dateText = formatDate(new Date(review.updatedAt));
+        date.innerHTML = dateText;
+      } else {
+        createReviewHTML(review, false);
+      }
+    }
+  }
+}
 
 /**
  * Add restaurant name to the breadcrumb navigation menu
