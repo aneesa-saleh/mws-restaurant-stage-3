@@ -271,7 +271,7 @@ const fillReviewsHTML = (reviews = self.reviews) => {
   }
   const ul = document.getElementById('reviews-list');
   reviews.forEach((review) => {
-    ul.appendChild(createReviewHTML(review));
+    ul.insertBefore(createReviewHTML(review), ul.firstChild);
   });
 };
 
@@ -281,7 +281,7 @@ const fillSendingReviewsHTML = (outboxReviews = self.outboxReviews) => {
   const ul = document.getElementById('reviews-list');
   outboxReviews.forEach((outboxReview) => {
     const { request_id, ...review } = outboxReview;
-    ul.appendChild(createReviewHTML(review, true, request_id));
+    ul.insertBefore(createReviewHTML(review, true, request_id), ul.firstChild);
   });
 };
 

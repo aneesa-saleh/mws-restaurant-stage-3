@@ -183,7 +183,7 @@ function handleAddReviewSubmit() {
         } else {
           // TODO: toast success
           const ul = document.getElementById('reviews-list');
-          ul.appendChild(createReviewHTML(newReview));
+          ul.insertBefore(createReviewHTML(newReview), ul.firstChild);
           closeModal();
           clearForm();
         }
@@ -192,7 +192,7 @@ function handleAddReviewSubmit() {
       const requestId = `${self.restaurant.id}-${Date.now()}`;
       const newReview = { name, rating, comments, restaurant_id: self.restaurant.id };
       const ul = document.getElementById('reviews-list');
-      ul.appendChild(createReviewHTML(newReview, true, requestId));
+      ul.insertBefore(createReviewHTML(newReview, true, requestId), ul.firstChild);
       closeModal();
       clearForm();
       navigator.serviceWorker.controller.postMessage({
