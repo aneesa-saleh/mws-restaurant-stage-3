@@ -7,7 +7,10 @@ function openModal() {
   overlay.classList.add('show');
   document.body.classList.add('has-open-modal');
   document.addEventListener('keydown', trapTabKey);
-  setTimeout(function(){ interactiveElements[0].focus(); }, 100);
+  // focus the first element in the overlay. timeout is needed because of CSS transition
+  setTimeout(function(){
+    interactiveElements[0].focus();
+  }, 100);
 }
 
 function closeModal() {
@@ -178,10 +181,10 @@ function handleAddReviewSubmit() {
         submitButton.removeAttribute('disabled');
         submitButton.setAttribute('aria-busy', 'false');
         if (error) {
-          // TODO: toast error
+          showToast('An error occurred. Please try again', 'error');
           console.log(error);
         } else {
-          // TODO: toast success
+          showToast(`${name}'s review has been saved`, 'success');
           const ul = document.getElementById('reviews-list');
           ul.insertBefore(createReviewHTML(newReview), ul.firstChild);
           closeModal();
@@ -193,6 +196,11 @@ function handleAddReviewSubmit() {
       const newReview = { name, rating, comments, restaurant_id: self.restaurant.id };
       const ul = document.getElementById('reviews-list');
       ul.insertBefore(createReviewHTML(newReview, true, requestId), ul.firstChild);
+
+      if (('onLine' in navigator) && !navigator.onLine) {
+        showToast('You are offline', 'error');
+      }
+
       closeModal();
       clearForm();
       navigator.serviceWorker.controller.postMessage({

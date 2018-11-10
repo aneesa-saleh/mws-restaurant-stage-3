@@ -5,11 +5,15 @@ let newMap;
 let matchesMediaQuery;
 const mediaQuery = '(min-width: 800px)';
 let previouslyFocusedElement;
+let toastTimer = null;
+let previouslyConnected;
 
 /**
  * Initialize map as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
+  previouslyConnected = navigator.onLine;
+
   initMap();
   fetchReviews();
   if (window.matchMedia) {
@@ -24,12 +28,20 @@ document.addEventListener('DOMContentLoaded', (event) => {
       const { type, requestId, review, error } = event.data;
       if (type === 'update-review') {
         if (error) {
+          showToast('An error occurred while submitting your review', 'error');
           updateReviewHTML(true, requestId);
         } else {
+          showToast(`${review.name}'s review has been saved`, 'success');
           updateReviewHTML(false, requestId, review);
         }
       }
     })
+  }
+
+  if ('onLine' in navigator) {
+    window.addEventListener('online', showConnectionStatus);
+    window.addEventListener('offline', showConnectionStatus);
+    showConnectionStatus();
   }
 });
 
@@ -344,7 +356,6 @@ const updateReviewHTML = (error, requestId, review) => {
   const reviewElement = document.querySelector(`[data-id="${requestId}"]`);
   if (error) {
     if (reviewElement) { // for error, no need to add to UI if it doesn't exist
-      reviewElement.classList.remove('sending');
       const date = reviewElement.querySelector('.review-date');
       date.innerHTML = '';
       const icon = document.createElement('i');
@@ -431,4 +442,41 @@ const toggleRestaurantAsFavourite = () => {
     }
     self.restaurant = updatedRestaurant;
   });
+}
+
+function hideToast() {
+  clearTimeout(toastTimer);
+  toastTimer = null;
+  document.getElementById('toast').classList.remove('show');
+}
+
+function showToast(message, type) {
+  if (!message) return;
+
+  const toast = document.getElementById('toast');
+  const toastText = toast.querySelector('.toast-text');
+  toastText.innerHTML = message;
+
+  if (type === 'error') {
+    toast.className = 'toast show error';
+  } else if (type === 'success') {
+    toast.className = 'toast show success';
+  } else {
+    toast.className = 'toast show';
+  }
+
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(hideToast, 5000);
+}
+
+function showConnectionStatus() {
+  var connectionStatus = document.getElementById('connectionStatus');
+
+  if (navigator.onLine && !previouslyConnected) { // user came back online
+    showToast('You are back online', 'success');
+  } else if (!navigator.onLine && previouslyConnected) { // user went offline
+    showToast('You are offline', 'error');
+  }
+
+  previouslyConnected = navigator.onLine;
 }
