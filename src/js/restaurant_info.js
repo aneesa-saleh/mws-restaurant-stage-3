@@ -444,17 +444,30 @@ const toggleRestaurantAsFavourite = () => {
   });
 }
 
+function clearToastTimer() {
+  clearTimeout(toastTimer);
+  toastTimer = null;
+}
+
 function hideToast() {
   clearTimeout(toastTimer);
   toastTimer = null;
-  document.getElementById('toast').classList.remove('show');
+  const toast = document.getElementById('toast');
+  const toastText = document.getElementById('toast-text');
+  toast.classList.remove('show');
+  setTimeout(function() {
+    toastText.setAttribute('aria-live', 'polite');
+  }, 0);
 }
 
 function showToast(message, type) {
   if (!message) return;
 
   const toast = document.getElementById('toast');
-  const toastText = toast.querySelector('.toast-text');
+  const toastText = document.getElementById('toast-text');
+  const toastIcon = document.getElementById('toast-icon');
+
+  toastText.setAttribute('aria-live', 'polite');
   toastText.innerHTML = message;
 
   if (type === 'error') {
@@ -466,7 +479,10 @@ function showToast(message, type) {
   }
 
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(hideToast, 5000);
+  setTimeout(function() {
+    toastText.setAttribute('aria-live', 'off');
+  }, 0);
+  toastTimer = setTimeout(hideToast, 10000);
 }
 
 function showConnectionStatus() {

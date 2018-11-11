@@ -198,7 +198,7 @@ function handleAddReviewSubmit() {
       ul.insertBefore(createReviewHTML(newReview, true, requestId), ul.firstChild);
 
       if (('onLine' in navigator) && !navigator.onLine) {
-        showToast('You are offline', 'error');
+        showToast('Your review will be submitted when you are back online');
       }
 
       closeModal();
