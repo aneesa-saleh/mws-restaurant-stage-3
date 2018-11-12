@@ -43,6 +43,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     window.addEventListener('offline', showConnectionStatus);
     showConnectionStatus();
   }
+
+  const toast = document.getElementById('toast');
 });
 
 /**

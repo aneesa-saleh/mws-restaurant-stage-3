@@ -146,7 +146,7 @@
   <!-- End modal -->
 
   <!-- Beginning toast -->
-  <div class="toast" id="toast" onmouseover="clearToastTimer()">
+  <div class="toast" id="toast" onmouseenter="pauseToastTimer()" onmouseleave="restartToastTimer()">
     <span class="toast-content">
       <i id="toast-icon"></i>
       <span id="toast-text" class="toast-text" aria-live="polite"></span>

@@ -1,9 +1,18 @@
 let toastTimer = null;
 const pendingToasts = [];
+let shouldRestartToastTimer = false;
 
-function clearToastTimer() {
+function pauseToastTimer() {
   clearTimeout(toastTimer);
   toastTimer = null;
+  shouldRestartToastTimer = true;
+}
+
+function restartToastTimer() {
+  if (shouldRestartToastTimer) {
+    shouldRestartToastTimer = false;
+    setTimeout(hideToast, 2000);
+  }
 }
 
 function enqueueToast(message, type) {
@@ -17,6 +26,7 @@ function enqueueToast(message, type) {
 function hideToast() {
   clearTimeout(toastTimer);
   toastTimer = null;
+  shouldRestartToastTimer = false;
   const toast = document.getElementById('toast');
   const toastText = document.getElementById('toast-text');
   toast.classList.remove('show');
