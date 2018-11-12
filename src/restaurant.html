@@ -50,56 +50,62 @@
 
   <!-- Beginning main -->
   <main class="main-content">
-    <h1 id="restaurant-name" class="restaurant-name"></h1>
-    <!-- Beginning accesible restaurant container -->
-    <div id="accessible-restaurant-container" class="off-screen">
-      <span role="img" id="accessible-restaurant-img"></span>
-      <span id="accessible-restaurant-cuisine"></span>
-    </div>
-    <!-- End accesible restaurant container -->
-    <!-- Beginning map -->
-    <section class="map-container">
-      <div id="map" class="map" aria-describedby="restaurant-address"></div>
-      <p id="restaurant-address" class="restaurant-address">
-        <span class="off-screen">Address:</span>
-      </p>
-    </section>
-    <!-- End map -->
-    <!-- Beginning restaurant -->
-    <section id="restaurant-container" class="restaurant-container">
-      <figure class="restaurant-img-container">
-        <picture id="restaurant-picture"></picture>
-        <figcaption id="restaurant-cuisine" class="restaurant-cuisine"></figcaption>
-      </figure>
-    </section>
-    <!-- end restaurant -->
-    <!-- Beginning opening hours -->
-    <section id="opening-hours-container" class="opening-hours-container">
-      <table id="restaurant-hours" class="restaurant-hours">
-        <caption>Opening hours</caption>
-      </table>
-    </section>
-    <!-- end opening hours -->
-
-    <!-- Beginning mark as favourite -->
-    <div class="mark-as-favourite-container">
-      <button id="mark-as-favourite" class="mark-as-favourite" type="button" onclick="toggleRestaurantAsFavourite(event)" aria-describedby="favourite-star" aria-busy="false">
-        <span class="mark-as-favourite-text"></span>
-        <i class="fa-star favourite-star"></i>
-      </button>
-      <img src="/img/spinner.gif" alt="" id="favourite-spinner" class="spinner">
-    </div>
-    <!-- End mark as favourite -->
-
-    <!-- Beginning reviews -->
-    <section id="reviews-container" class="reviews-container">
-      <div class="reviews-heading-container">
-        <h2>Reviews</h2>
-        <button type="button" class="add-review-button" id="add-review-button" onclick="openModal()">Add Review</button>
+    <img src="/img/spinner.gif" alt="Page loading" id="main-spinner" class="main-spinner spinner show">
+    <h2 id="main-error" class="main-error" aria-live="polite">404. Restaurant Not Found.</h2>
+    <!-- Beginning wrap main content -->
+    <div id="wrap-main-content" class="wrap-main-content hide">
+      <h1 id="restaurant-name" class="restaurant-name"></h1>
+      <!-- Beginning accesible restaurant container -->
+      <div id="accessible-restaurant-container" class="off-screen">
+        <span role="img" id="accessible-restaurant-img"></span>
+        <span id="accessible-restaurant-cuisine"></span>
       </div>
-      <div id="reviews-list" class="reviews-list"></div>
-    </section>
-    <!-- End reviews -->
+      <!-- End accesible restaurant container -->
+      <!-- Beginning map -->
+      <section class="map-container">
+        <div id="map" class="map" aria-describedby="restaurant-address"></div>
+        <p id="restaurant-address" class="restaurant-address">
+          <span class="off-screen">Address:</span>
+        </p>
+      </section>
+      <!-- End map -->
+      <!-- Beginning restaurant -->
+      <section id="restaurant-container" class="restaurant-container">
+        <figure class="restaurant-img-container">
+          <picture id="restaurant-picture"></picture>
+          <figcaption id="restaurant-cuisine" class="restaurant-cuisine"></figcaption>
+        </figure>
+      </section>
+      <!-- end restaurant -->
+      <!-- Beginning opening hours -->
+      <section id="opening-hours-container" class="opening-hours-container">
+        <table id="restaurant-hours" class="restaurant-hours">
+          <caption>Opening hours</caption>
+        </table>
+      </section>
+      <!-- end opening hours -->
+
+      <!-- Beginning mark as favourite -->
+      <div class="mark-as-favourite-container">
+        <button id="mark-as-favourite" class="mark-as-favourite" type="button" onclick="toggleRestaurantAsFavourite(event)" aria-describedby="favourite-star" aria-busy="false">
+          <span class="mark-as-favourite-text"></span>
+          <i class="fa-star favourite-star"></i>
+        </button>
+        <img src="/img/spinner.gif" alt="" id="favourite-spinner" class="spinner">
+      </div>
+      <!-- End mark as favourite -->
+
+      <!-- Beginning reviews -->
+      <section id="reviews-container" class="reviews-container">
+        <div class="reviews-heading-container">
+          <h2>Reviews</h2>
+          <button type="button" class="add-review-button" id="add-review-button" onclick="openModal()">Add Review</button>
+        </div>
+        <div id="reviews-list" class="reviews-list"></div>
+      </section>
+      <!-- End reviews -->
+    </div>
+    <!-- End wrap main content -->
   </main>
   <!-- End main -->
 

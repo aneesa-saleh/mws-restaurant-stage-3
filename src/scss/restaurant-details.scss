@@ -113,6 +113,33 @@ img {
     margin-top: 58px;
 	}
 }
+
+.main-spinner {
+	display: none;
+	margin: 150px auto;
+	width: 40px;
+	height: 40px;
+}
+
+.main-spinner.show {
+	display: block;
+}
+
+.wrap-main-content.hide {
+	display: none;
+}
+
+.main-error {
+	font-weight: normal;
+	font-size: 2em;
+	margin: 150px 0;
+	display: none;
+}
+
+.main-error.show {
+	display: block;
+}
+
 /* ====================== Navigation ====================== */
 header {
 	left: 0;

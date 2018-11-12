@@ -13,13 +13,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
   previouslyConnected = navigator.onLine;
 
   initMap();
-  fetchReviews();
   if (window.matchMedia) {
     matchesMediaQuery = window.matchMedia(mediaQuery).matches;
   }
   updateRestaurantContainerAria(); // set initial aria values
   registerServiceWorker();
-  setInterval(cleanMapboxTilesCache, 5000);
+
+  if (window.caches) {
+    setInterval(cleanMapboxTilesCache, 5000);
+  }
 
   if (navigator.serviceWorker) {
     navigator.serviceWorker.addEventListener('message', (event) => {
@@ -115,16 +117,22 @@ const fetchRestaurantFromURL = (callback) => {
   }
   const id = getUrlParam('id');
   if (!id) { // no id found in URL
-    error = 'No restaurant id in URL';
+    const error = 'No restaurant id in URL';
     callback(error, null);
+    document.getElementById('main-spinner').classList.remove('show');
+    document.getElementById('main-error').classList.add('show');
   } else {
     DBHelper.fetchRestaurantById(id, (error, restaurant) => {
       self.restaurant = restaurant;
       if (!restaurant) {
-        console.error(error);
+        document.getElementById('main-spinner').classList.remove('show');
+        document.getElementById('main-error').classList.add('show');
         return;
       }
+      fetchReviews(id);
       fillRestaurantHTML();
+      document.getElementById('main-spinner').classList.remove('show');
+      document.getElementById('wrap-main-content').classList.remove('hide');
       callback(null, restaurant);
     });
   }
@@ -247,28 +255,23 @@ const fillMarkAsFavouriteHTML = (isFavourite = self.restaurant.is_favorite) => {
 /**
  * Get current restaurant from page URL.
  */
-const fetchReviews = () => {
-  const id = getUrlParam('id');
-  if (!id) { // no id found in URL
-    console.log('No restaurant id in URL');
-  } else {
-    DBHelper.fetchReviewsByRestaurantId(id, (error, reviews) => {
-      self.reviews = reviews;
-      if (!reviews) {
-        console.error(error);
-        return;
+const fetchReviews = (id) => {
+  DBHelper.fetchReviewsByRestaurantId(id, (error, reviews) => {
+    self.reviews = reviews;
+    if (!reviews) {
+      console.error(error);
+      return;
+    }
+    fillReviewsHTML();
+    DBHelper.getOutboxReviews(id, (error, outboxReviews) => {
+      if (error) {
+        console.log(error);
+      } else {
+        self.outboxReviews = outboxReviews;
+        fillSendingReviewsHTML();
       }
-      fillReviewsHTML();
-      DBHelper.getOutboxReviews(id, (error, outboxReviews) => {
-        if (error) {
-          console.log(error);
-        } else {
-          self.outboxReviews = outboxReviews;
-          fillSendingReviewsHTML();
-        }
-      });
     });
-  }
+  });
 };
 
 /**

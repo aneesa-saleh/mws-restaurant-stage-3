@@ -125,7 +125,7 @@ class DBHelper {
 
       // return reviews from IDB
       let store = db.transaction('reviews').objectStore('reviews');
-      let reviewsByRestaurantIdIndex = store.index('restaurant_id');
+      const reviewsByRestaurantIdIndex = store.index('restaurant_id');
       // id comes as a string from the url, convert to a number before lookup
       return reviewsByRestaurantIdIndex.getAll(Number.parseInt(restaurantId, 10)).then((idbReviews) => {
         const fetchResponse = fetch(reviewsByRestaurantIdURL)
@@ -271,10 +271,10 @@ class DBHelper {
     return marker;
   }
 
-  static setRestaurantFavouriteStatus(restaurant_id, status, callback) {
-    const setFavouriteStatusUrl = `${DBHelper.DATABASE_URL}/restaurants/${restaurant_id}/?is_favorite=${status}`;
+  static setRestaurantFavouriteStatus(restaurantId, status, callback) {
+    const setFavouriteStatusUrl = `${DBHelper.DATABASE_URL}/restaurants/${restaurantId}/?is_favorite=${status}`;
     fetch(setFavouriteStatusUrl, { method: 'PUT' }).then((response) => {
-      if(!response.ok) {
+      if (!response.ok) {
         return Promise.reject();
       }
       return response.json();
@@ -289,16 +289,16 @@ class DBHelper {
     });
   }
 
-  static addReview(restaurant_id, name, rating, comments, callback) {
+  static addReview(restaurantId, name, rating, comments, callback) {
     const addReviewUrl = `${DBHelper.DATABASE_URL}/reviews`;
     const body = JSON.stringify({
-      restaurant_id,
+      restaurant_id: restaurantId,
       name,
       rating,
       comments,
     });
     fetch(addReviewUrl, { method: 'POST', body }).then((response) => {
-      if(!response.ok) {
+      if (!response.ok) {
         const error = (`Request failed. Returned status of ${response.status}`);
         return Promise.reject(error);
       }
@@ -315,13 +315,14 @@ class DBHelper {
       if (!db) {
         const error = 'Error connecting to IndexedDB';
         callback(error, null);
+        return;
       }
-      let store = db.transaction('outbox').objectStore('outbox');
-      let reviewsByRestaurantIdIndex = store.index('restaurant_id');
+      const store = db.transaction('outbox').objectStore('outbox');
+      const reviewsByRestaurantIdIndex = store.index('restaurant_id');
       // id comes as a string from the url, convert to a number before lookup
       reviewsByRestaurantIdIndex.getAll(Number.parseInt(restaurantId, 10)).then((idbReviews) => {
         callback(null, idbReviews);
       });
-    })
+    });
   }
 }
