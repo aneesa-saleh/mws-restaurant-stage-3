@@ -41,10 +41,13 @@ function showToast() {
 
   if (type === 'error') {
     toastElement.className = 'toast show error';
+    toastIcon.className = 'fas fa-exclamation-triangle';
   } else if (type === 'success') {
     toastElement.className = 'toast show success';
+    toastIcon.className = 'fas fa-check';
   } else {
     toastElement.className = 'toast show';
+    toastIcon.className = 'fas fa-info-circle';
   }
 
   clearTimeout(toastTimer);

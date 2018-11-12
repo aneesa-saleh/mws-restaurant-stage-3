@@ -1022,11 +1022,15 @@ input[type="text"].has-error, input[type="range"].has-error, textarea.has-error 
   background-color: #008A00;
 }
 
-.toast-text {
-  text-align: center;
+.toast-content {
+	text-align: center;
   width: calc(100% - 25px);
   display: inline-block;
   margin: 5px 0;
+}
+
+.toast-text {
+	margin-left: 5px;
 }
 
 .close-toast {
@@ -1058,7 +1062,7 @@ input[type="text"].has-error, input[type="range"].has-error, textarea.has-error 
     width: fit-content;
   }
 
-  .toast-text {
+  .toast-content {
     width: auto;
   }
 

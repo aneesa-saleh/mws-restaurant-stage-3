@@ -147,8 +147,10 @@
 
   <!-- Beginning toast -->
   <div class="toast" id="toast" onmouseover="clearToastTimer()">
-    <i id="toast-icon"></i>
-    <span id="toast-text" class="toast-text" aria-live="polite"></span>
+    <span class="toast-content">
+      <i id="toast-icon"></i>
+      <span id="toast-text" class="toast-text" aria-live="polite"></span>
+    </span>
     <button class="close-toast" onclick="hideToast()" aria-label="close notification"><i class="fas fa-times"></i></button>
   </div>
   <!-- Ending toast -->
