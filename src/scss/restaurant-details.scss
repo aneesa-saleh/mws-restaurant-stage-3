@@ -125,6 +125,12 @@ img {
 	display: block;
 }
 
+.wrap-main-content {
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+}
+
 .wrap-main-content.hide {
 	display: none;
 }
@@ -240,6 +246,7 @@ nav {
 .map-container {
 	margin-left: auto;
 	margin-right: auto;
+	width: 100%;
 	max-width: 1000px;
 	position: relative;
 
@@ -315,8 +322,6 @@ nav {
 
 @media screen and (min-width: 800px) {
 	.inside .main-content {
-		display: flex;
-		flex-wrap: wrap;
 		margin-left: auto;
 		margin-right: auto;
 		margin-top: 106px;

@@ -2,7 +2,7 @@ let restaurant;
 let reviews;
 let outboxReviews;
 let newMap;
-let matchesMediaQuery;
+let matchesMediaQuery = true;
 const mediaQuery = '(min-width: 800px)';
 let previouslyConnected;
 
@@ -13,9 +13,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
   previouslyConnected = navigator.onLine;
 
   initMap();
-  if (window.matchMedia) {
-    matchesMediaQuery = window.matchMedia(mediaQuery).matches;
-  }
+  // if (window.matchMedia) {
+  //   matchesMediaQuery = window.matchMedia(mediaQuery).matches;
+  // }
   updateRestaurantContainerAria(); // set initial aria values
   registerServiceWorker();
 
