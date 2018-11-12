@@ -155,6 +155,9 @@ function handleRangeChange(event) {
 
 function handleInputKeyUp(event) {
   if (!(event.key && event.key === 'Tab')) {
+    // when tab is used, allow the onblur handler to perform validation
+    // when the tab key is pressed, focus is already on the next input when the event fires
+    // so the wrong input is validated
     validateInput(event.target.name, event.target.value);
   }
 }
@@ -242,6 +245,6 @@ function handleAddReviewSubmit() {
   }
 }
 
-function logEvent(event) {
-  console.log(event.target.value);
+function handleFormSubmit(event) {
+  event.preventDefault();
 }

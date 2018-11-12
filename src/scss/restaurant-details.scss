@@ -794,7 +794,7 @@ body.has-open-modal {
 }
 
 .form-group {
-	margin-bottom: 20px;
+	margin-bottom: 5px;
 }
 
 .form-button-container {
@@ -976,7 +976,7 @@ input[type="text"].has-error, input[type="range"].has-error, textarea.has-error 
 }
 
 .form-error {
-	opacity: 0;
+	visibility: hidden;
 	color: $red;
 }
 
@@ -985,7 +985,7 @@ input[type="text"].has-error, input[type="range"].has-error, textarea.has-error 
 }
 
 .form-error.show {
-	opacity: 1;
+	visibility: visible;
 }
 
 /***** toast *****/
