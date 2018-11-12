@@ -85,22 +85,61 @@ gulp.task('sw-dist', () => {
 });
 
 gulp.task('scripts', () => {
-  gulp.src('src/js/*.js')
+  gulp.src('src/js/main.js')
     .pipe(sourcemaps.init())
     .pipe(babel({
       presets: ['@babel/env'],
     }))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('dist/js'));
-});
 
-gulp.task('scripts-dist', () => {
-  gulp.src('src/js/*.js')
+  gulp.src(['src/js/restaurant_info.js', 'src/js/helpers/addReviewModal.js'])
     .pipe(sourcemaps.init())
     .pipe(babel({
       presets: ['@babel/env'],
     }))
     .pipe(sourcemaps.write())
+    .pipe(concat('restaurant_info.js'))
+    .pipe(gulp.dest('dist/js'));
+
+  gulp.src(['src/js/helpers/swhelper.js', 'src/js/helpers/dbhelper.js', 'src/js/helpers/mischelpers.js', 'src/js/helpers/toasts.js', ''])
+    .pipe(sourcemaps.init())
+    .pipe(babel({
+      presets: ['@babel/env'],
+    }))
+    .pipe(sourcemaps.write())
+    .pipe(concat('helpers.js'))
+    .pipe(gulp.dest('dist/js'));
+});
+
+gulp.task('scripts-dist', () => {
+  gulp.src('src/js/main.js')
+    .pipe(sourcemaps.init())
+    .pipe(babel({
+      presets: ['@babel/env'],
+    }))
+    .pipe(sourcemaps.write())
+    .pipe(concat('main.min.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest('dist/js'));
+
+  gulp.src('src/js/restaurant_info.js')
+    .pipe(sourcemaps.init())
+    .pipe(babel({
+      presets: ['@babel/env'],
+    }))
+    .pipe(sourcemaps.write())
+    .pipe(concat('restaurant_info.min.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest('dist/js'));
+
+  gulp.src('src/js/helpers/*.js')
+    .pipe(sourcemaps.init())
+    .pipe(babel({
+      presets: ['@babel/env'],
+    }))
+    .pipe(sourcemaps.write())
+    .pipe(concat('helpers.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest('dist/js'));
 });

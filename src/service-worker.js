@@ -1,4 +1,4 @@
-importScripts('/js/swhelper.js', '/js/dbhelper.js', 'https://cdn.jsdelivr.net/npm/idb@2.1.3/lib/idb.min.js');
+importScripts('/js/helpers.js', 'https://cdn.jsdelivr.net/npm/idb@2.1.3/lib/idb.min.js');
 
 const staticCacheName = 'restaurant-reviews-static-v5';
 const restaurantImagesCache = 'restaurant-reviews-restaurant-images';
@@ -16,8 +16,7 @@ self.addEventListener('install', (event) => {
       '/restaurant.html',
       '/css/restaurant-details.css',
       '/css/restaurants-list.css',
-      '/js/dbhelper.js',
-      '/js/swhelper.js',
+      '/js/helpers.js',
       '/js/main.js',
       '/js/restaurant_info.js',
       '/img/offline.svg',
