@@ -16,6 +16,7 @@ function openModal() {
 }
 
 function closeModal() {
+  clearFormErrors();
   document.querySelector('.overlay').classList.remove('show');
   document.body.classList.remove('has-open-modal');
   document.removeEventListener('keydown', trapTabKey);
@@ -114,10 +115,16 @@ const errorFunctions = {
 
 /** **** validation ****** */
 
-function validateInput(id) {
+function validateInput(id, value) {
   const input = document.getElementById(id).cloneNode();
-  const value = id === 'rating' ? Number.parseInt(input.value, 10) : input.value;
-  if (value) {
+  let inputValue;
+  if (value !== undefined) {
+    inputValue = value;
+  } else {
+    inputValue = input.value;
+  }
+  inputValue = id === 'rating' ? Number.parseInt(inputValue, 10) : inputValue;
+  if (inputValue) {
     errorFunctions[id].clearError();
     return true;
   }
@@ -126,13 +133,17 @@ function validateInput(id) {
 }
 
 function validateAllInputs() {
-  let allInputsValid = true;
+  let error = false;
   const inputIds = ['name', 'rating', 'comments'];
+  const invalidInputs = [];
   inputIds.forEach((id) => {
     const inputValid = validateInput(id);
-    allInputsValid = allInputsValid && inputValid;
+    if (!inputValid) {
+      invalidInputs.push(id);
+      error = true;
+    }
   });
-  return allInputsValid;
+  return { error, invalidInputs };
 }
 
 /** **** handle events ****** */
@@ -140,18 +151,17 @@ function validateAllInputs() {
 function handleRangeChange(event) {
   const ratingValue = document.querySelector('.rating-value');
   ratingValue.innerHTML = `${event.target.value}.0`;
+  validateInput(event.target.name, event.target.value);
 }
 
-function handleNameInputBlur() {
-  validateInput('name');
+function handleInputKeyUp(event) {
+  if (!(event.keyCode === 9)) { // Tab key
+    validateInput(event.target.name, event.target.value);
+  }
 }
 
-function handleRatingInputBlur() {
-  validateInput('rating');
-}
-
-function handleCommentInputBlur() {
-  validateInput('comments');
+function handleInputBlur(event) {
+  validateInput(event.target.name, event.target.value);
 }
 
 function getFormInputValues() {
@@ -170,9 +180,19 @@ function clearForm() {
   document.getElementById('comments').value = '';
 }
 
+function clearFormErrors() {
+  document.getElementById('name-error').classList.remove('show');
+  document.getElementById('rating-error').classList.remove('show');
+  document.getElementById('comments-error').classList.remove('show');
+  document.getElementById('add-review-form-error').classList.remove('show');
+  document.getElementById('name').classList.remove('has-error');
+  document.getElementById('rating').classList.remove('has-error');
+  document.getElementById('comments').classList.remove('has-error');
+}
+
 function handleAddReviewSubmit() {
-  const allInputsValid = validateAllInputs();
-  if (allInputsValid) {
+  const { error, invalidInputs } = validateAllInputs();
+  if (!error) {
     const { name, rating, comments } = getFormInputValues();
     if ((!navigator.serviceWorker) || (!navigator.serviceWorker.controller)) {
       // perform regular fetch and regular updates
@@ -213,5 +233,15 @@ function handleAddReviewSubmit() {
         requestId,
       });
     }
+  } else { // form errors not cleared
+    const formError = document.getElementById('add-review-form-error');
+    const errorText = `Invalid input for: ${invalidInputs.join(', ')}`;
+    formError.innerHTML = errorText;
+    formError.classList.add('show');
+    document.getElementById(invalidInputs[0]).focus();
   }
+}
+
+function logEvent(event) {
+  console.log(event.target.value);
 }

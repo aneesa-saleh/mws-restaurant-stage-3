@@ -980,6 +980,10 @@ input[type="text"].has-error, input[type="range"].has-error, textarea.has-error 
 	color: $red;
 }
 
+.form-error.center {
+	text-align: center;
+}
+
 .form-error.show {
 	display: block;
 }
