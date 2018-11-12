@@ -425,12 +425,18 @@ const toggleRestaurantAsFavourite = () => {
   const button = document.getElementById('mark-as-favourite');
   const spinner = document.getElementById('favourite-spinner');
   let failedUpdateCallback;
+  let successMessage;
+  let errorMessage;
   if (newIsFavourite) {
     markRestaurantAsFavourite(button);
     failedUpdateCallback = unmarkRestaurantAsFavourite;
+    successMessage = 'Restaurant has been marked as favourite';
+    errorMessage = 'An error occurred marking restaurant as favourite';
   } else {
     unmarkRestaurantAsFavourite(button);
     failedUpdateCallback = markRestaurantAsFavourite;
+    successMessage = 'Restaurant has been unmarked as favourite';
+    errorMessage = 'An error occurred unmarking restaurant as favourite';
   }
   setMarkAsFavouriteFetchingState(button, spinner);
   DBHelper.setRestaurantFavouriteStatus(restaurantId, newIsFavourite, (error, updatedRestaurant) => {
@@ -438,9 +444,11 @@ const toggleRestaurantAsFavourite = () => {
     if (!updatedRestaurant) {
       console.error(error);
       failedUpdateCallback(button);
+      enqueueToast(errorMessage, 'error');
       return;
     }
     self.restaurant = updatedRestaurant;
+    enqueueToast(successMessage, 'success');
   });
 };
 
