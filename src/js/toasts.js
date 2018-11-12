@@ -7,7 +7,7 @@ function clearToastTimer() {
 }
 
 function enqueueToast(message, type) {
-  // add the toast to the beginning of the array
+  // add the toast to the beginning of the array (queue)
   pendingToasts.unshift({ message, type });
   if (toastTimer === null) { // no toast is currently showing
     showToast();
