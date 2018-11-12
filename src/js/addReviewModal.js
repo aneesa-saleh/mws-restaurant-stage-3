@@ -183,10 +183,10 @@ function handleAddReviewSubmit() {
         submitButton.removeAttribute('disabled');
         submitButton.setAttribute('aria-busy', 'false');
         if (error) {
-          showToast('An error occurred. Please try again', 'error');
+          enqueueToast('An error occurred. Please try again', 'error');
           console.log(error);
         } else {
-          showToast(`${name}'s review has been saved`, 'success');
+          enqueueToast(`${name}'s review has been saved`, 'success');
           const ul = document.getElementById('reviews-list');
           ul.insertBefore(createReviewHTML(newReview), ul.firstChild);
           closeModal();
@@ -202,7 +202,7 @@ function handleAddReviewSubmit() {
       ul.insertBefore(createReviewHTML(newReview, true, requestId), ul.firstChild);
 
       if (('onLine' in navigator) && !navigator.onLine) {
-        showToast('Your review will be submitted when you are back online');
+        enqueueToast('Your review will be submitted when you are back online');
       }
 
       closeModal();

@@ -4,7 +4,6 @@ let outboxReviews;
 let newMap;
 let matchesMediaQuery;
 const mediaQuery = '(min-width: 800px)';
-let toastTimer = null;
 let previouslyConnected;
 
 /**
@@ -29,10 +28,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
       } = event.data;
       if (type === 'update-review') {
         if (error) {
-          showToast('An error occurred while submitting your review', 'error');
+          enqueueToast('An error occurred while submitting your review', 'error');
           updateReviewHTML(true, requestId);
         } else {
-          showToast(`${review.name}'s review has been saved`, 'success');
+          enqueueToast(`${review.name}'s review has been saved`, 'success');
           updateReviewHTML(false, requestId, review);
         }
       }
@@ -114,7 +113,7 @@ const fetchRestaurantFromURL = (callback) => {
   }
   const id = getUrlParam('id');
   if (!id) { // no id found in URL
-    const error = 'No restaurant id in URL';
+    error = 'No restaurant id in URL';
     callback(error, null);
   } else {
     DBHelper.fetchRestaurantById(id, (error, restaurant) => {
@@ -274,26 +273,25 @@ const fetchReviews = () => {
  * Create all reviews HTML and add them to the webpage.
  */
 const fillReviewsHTML = (reviews = self.reviews) => {
-  const list = document.getElementById('reviews-list');
-
   if (!reviews || reviews.length === 0) {
     const noReviews = document.createElement('p');
     noReviews.innerHTML = 'No reviews yet!';
-    list.appendChild(noReviews);
+    container.appendChild(noReviews);
     return;
   }
+  const ul = document.getElementById('reviews-list');
   reviews.forEach((review) => {
-    list.insertBefore(createReviewHTML(review), list.firstChild);
+    ul.insertBefore(createReviewHTML(review), ul.firstChild);
   });
 };
 
 const fillSendingReviewsHTML = (outboxReviews = self.outboxReviews) => {
   if (!outboxReviews || outboxReviews.length === 0) return;
 
-  const list = document.getElementById('reviews-list');
+  const ul = document.getElementById('reviews-list');
   outboxReviews.forEach((outboxReview) => {
-    const { request_id: requestId, ...review } = outboxReview;
-    list.insertBefore(createReviewHTML(review, true, requestId), list.firstChild);
+    const { request_id, ...review } = outboxReview;
+    ul.insertBefore(createReviewHTML(review, true, request_id), ul.firstChild);
   });
 };
 
@@ -367,8 +365,8 @@ const updateReviewHTML = (error, requestId, review) => {
       date.classList.add('error');
     }
   } else {
-    const list = document.getElementById('reviews-list');
-    if (list && self.restaurant) { // only update if the restaurant is loaded
+    const ul = document.getElementById('reviews-list');
+    if (ul && self.restaurant) { // only update if the restaurant is loaded
       if (reviewElement) {
         reviewElement.classList.remove('sending');
         const date = reviewElement.querySelector('.review-date');
@@ -394,9 +392,11 @@ const fillBreadcrumb = (restaurant = self.restaurant) => {
 /**
  * Get a parameter by name from page URL.
  */
-const getUrlParam = (name, url = window.location.href) => {
-  const paramName = name.replace(/[\[\]]/g, '\\$&');
-  const regex = new RegExp(`[?&]${paramName}(=([^&#]*)|&|#|$)`);
+const getUrlParam = (name, url) => {
+  url = url || window.location.href;
+  name = name.replace(/[\[\]]/g, '\\$&');
+  const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
+
 
   const results = regex.exec(url);
   if (!results) return null;
@@ -431,69 +431,24 @@ const toggleRestaurantAsFavourite = () => {
     failedUpdateCallback = markRestaurantAsFavourite;
   }
   setMarkAsFavouriteFetchingState(button, spinner);
-  DBHelper.setRestaurantFavouriteStatus(
-    restaurantId,
-    newIsFavourite,
-    (error, updatedRestaurant) => {
-      removeMarkAsFavouriteFetchingState(button, spinner);
-      if (!updatedRestaurant) {
-        console.error(error);
-        failedUpdateCallback(button);
-        return;
-      }
-      self.restaurant = updatedRestaurant;
-    },
-  );
+  DBHelper.setRestaurantFavouriteStatus(restaurantId, newIsFavourite, (error, updatedRestaurant) => {
+    removeMarkAsFavouriteFetchingState(button, spinner);
+    if (!updatedRestaurant) {
+      console.error(error);
+      failedUpdateCallback(button);
+      return;
+    }
+    self.restaurant = updatedRestaurant;
+  });
 };
-
-function clearToastTimer() {
-  clearTimeout(toastTimer);
-  toastTimer = null;
-}
-
-function hideToast() {
-  clearTimeout(toastTimer);
-  toastTimer = null;
-  const toast = document.getElementById('toast');
-  const toastText = document.getElementById('toast-text');
-  toast.classList.remove('show');
-  setTimeout(() => {
-    toastText.setAttribute('aria-live', 'polite');
-  }, 0);
-}
-
-function showToast(message, type) {
-  if (!message) return;
-
-  const toast = document.getElementById('toast');
-  const toastText = document.getElementById('toast-text');
-  const toastIcon = document.getElementById('toast-icon');
-
-  toastText.setAttribute('aria-live', 'polite');
-  toastText.innerHTML = message;
-
-  if (type === 'error') {
-    toast.className = 'toast show error';
-  } else if (type === 'success') {
-    toast.className = 'toast show success';
-  } else {
-    toast.className = 'toast show';
-  }
-
-  clearTimeout(toastTimer);
-  setTimeout(() => {
-    toastText.setAttribute('aria-live', 'off');
-  }, 0);
-  toastTimer = setTimeout(hideToast, 10000);
-}
 
 function showConnectionStatus() {
   const connectionStatus = document.getElementById('connectionStatus');
 
   if (navigator.onLine && !previouslyConnected) { // user came back online
-    showToast('You are back online', 'success');
+    enqueueToast('You are back online', 'success');
   } else if (!navigator.onLine && previouslyConnected) { // user went offline
-    showToast('You are offline', 'error');
+    enqueueToast('You are offline', 'error');
   }
 
   previouslyConnected = navigator.onLine;
