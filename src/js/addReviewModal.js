@@ -28,10 +28,9 @@ function closeModal() {
 function trapTabKey(event) {
   const overlay = document.querySelector('.overlay');
   const interactiveElements = overlay.querySelectorAll('button, input');
-  const TAB = 9;
   const firstElement = interactiveElements[0];
   const lastElement = interactiveElements[interactiveElements.length - 1];
-  if (event.keyCode === TAB) {
+  if (event.key && event.key === 'Tab') {
     if (event.shiftKey && event.target === firstElement) { // shift + tab
       event.preventDefault();
       lastElement.focus();
@@ -128,7 +127,7 @@ function validateInput(id, value) {
     errorFunctions[id].clearError();
     return true;
   }
-  errorFunctions[id].setError();
+  requestAnimationFrame(errorFunctions[id].setError);
   return false;
 }
 
@@ -155,7 +154,7 @@ function handleRangeChange(event) {
 }
 
 function handleInputKeyUp(event) {
-  if (!(event.keyCode === 9)) { // Tab key
+  if (!(event.key && event.key === 'Tab')) {
     validateInput(event.target.name, event.target.value);
   }
 }
@@ -185,6 +184,7 @@ function clearFormErrors() {
   document.getElementById('rating-error').classList.remove('show');
   document.getElementById('comments-error').classList.remove('show');
   document.getElementById('add-review-form-error').classList.remove('show');
+  document.getElementById('add-review-form-error').innerHTML = '';
   document.getElementById('name').classList.remove('has-error');
   document.getElementById('rating').classList.remove('has-error');
   document.getElementById('comments').classList.remove('has-error');
