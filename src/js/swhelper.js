@@ -19,27 +19,33 @@ const cleanMapboxTilesCache = () => {
   );
 };
 
+/* eslint-disable default-case */
+/* eslint-disable no-fallthrough */
+
 const openDatabase = (requestFromServiceWorker) => {
   if (!navigator.serviceWorker && !requestFromServiceWorker) return Promise.resolve();
 
   return idb.open('restaurant-reviews', 4, (upgradeDb) => {
-    switch(upgradeDb.oldVersion) {
-      case 0:
+    switch (upgradeDb.oldVersion) {
+      case 0: {
         upgradeDb.createObjectStore('restaurants', {
           keyPath: 'id',
         });
-      case 1:
-        const reviewsStore = upgradeDb.createObjectStore('reviews', {
-          keyPath: 'id',
-        });
-        reviewsStore.createIndex('restaurant_id', 'restaurant_id');
-      case 2:
+      }
+      case 1: { const reviewsStore = upgradeDb.createObjectStore('reviews', {
+        keyPath: 'id',
+      });
+      reviewsStore.createIndex('restaurant_id', 'restaurant_id');
+      }
+      case 2: {
         upgradeDb.createObjectStore('outbox', {
           keyPath: 'request_id',
         });
-      case 3:
+      }
+      case 3: {
         const outboxStore = upgradeDb.transaction.objectStore('outbox');
         outboxStore.createIndex('restaurant_id', 'restaurant_id');
+      }
     }
   });
 };

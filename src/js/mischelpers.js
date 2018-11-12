@@ -1,21 +1,21 @@
 // https://stackoverflow.com/questions/3552461/how-to-format-a-javascript-date
 function formatDate(date) {
-  var monthNames = [
-    "January", "February", "March",
-    "April", "May", "June", "July",
-    "August", "September", "October",
-    "November", "December"
+  const monthNames = [
+    'January', 'February', 'March',
+    'April', 'May', 'June', 'July',
+    'August', 'September', 'October',
+    'November', 'December',
   ];
 
-  var day = date.getDate();
-  var month = monthNames[date.getMonth()];
-  var year = date.getFullYear();
+  const day = date.getDate();
+  const month = monthNames[date.getMonth()];
+  const year = date.getFullYear();
 
   return `${month} ${day}, ${year}`;
 }
 
 function stringToBoolean(string) {
-  if (typeof string === 'boolen') return string;
+  if (typeof string === 'boolean') return string;
 
   return string === 'true';
 }

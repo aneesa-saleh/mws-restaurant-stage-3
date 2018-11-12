@@ -1,4 +1,6 @@
-/****** modal *******/
+/** **** modal ****** */
+
+let previouslyFocusedElement;
 
 function openModal() {
   previouslyFocusedElement = document.activeElement;
@@ -8,7 +10,7 @@ function openModal() {
   document.body.classList.add('has-open-modal');
   document.addEventListener('keydown', trapTabKey);
   // focus the first element in the overlay. timeout is needed because of CSS transition
-  setTimeout(function(){
+  setTimeout(() => {
     interactiveElements[0].focus();
   }, 100);
 }
@@ -39,7 +41,7 @@ function trapTabKey(event) {
   }
 }
 
-/****** handle errors *******/
+/** **** handle errors ****** */
 
 function setNameInputError() {
   const nameInput = document.getElementById('name');
@@ -107,21 +109,20 @@ const errorFunctions = {
   comments: {
     setError: setCommentInputError,
     clearError: clearCommentInputError,
-  }
+  },
 };
 
-/****** validation *******/
+/** **** validation ****** */
 
 function validateInput(id) {
   const input = document.getElementById(id).cloneNode();
-  const value = id === 'rating'? Number.parseInt(input.value, 10) : input.value;
+  const value = id === 'rating' ? Number.parseInt(input.value, 10) : input.value;
   if (value) {
     errorFunctions[id].clearError();
     return true;
-  } else {
-    errorFunctions[id].setError();
-    return false;
   }
+  errorFunctions[id].setError();
+  return false;
 }
 
 function validateAllInputs() {
@@ -134,10 +135,10 @@ function validateAllInputs() {
   return allInputsValid;
 }
 
-/****** handle events *******/
+/** **** handle events ****** */
 
 function handleRangeChange(event) {
-  var ratingValue = document.querySelector('.rating-value');
+  const ratingValue = document.querySelector('.rating-value');
   ratingValue.innerHTML = `${event.target.value}.0`;
 }
 
@@ -173,7 +174,8 @@ function handleAddReviewSubmit() {
   const allInputsValid = validateAllInputs();
   if (allInputsValid) {
     const { name, rating, comments } = getFormInputValues();
-    if ((!navigator.serviceWorker) || (!navigator.serviceWorker.controller)) { // perform regular fetch and regular updates
+    if ((!navigator.serviceWorker) || (!navigator.serviceWorker.controller)) {
+      // perform regular fetch and regular updates
       const submitButton = document.getElementById('add-review-submit');
       submitButton.setAttribute('disabled', true);
       submitButton.setAttribute('aria-busy', 'true');
@@ -193,7 +195,9 @@ function handleAddReviewSubmit() {
       });
     } else {
       const requestId = `${self.restaurant.id}-${Date.now()}`;
-      const newReview = { name, rating, comments, restaurant_id: self.restaurant.id };
+      const newReview = {
+        name, rating, comments, restaurant_id: self.restaurant.id,
+      };
       const ul = document.getElementById('reviews-list');
       ul.insertBefore(createReviewHTML(newReview, true, requestId), ul.firstChild);
 

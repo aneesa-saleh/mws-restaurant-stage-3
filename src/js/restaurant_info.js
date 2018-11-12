@@ -4,7 +4,6 @@ let outboxReviews;
 let newMap;
 let matchesMediaQuery;
 const mediaQuery = '(min-width: 800px)';
-let previouslyFocusedElement;
 let toastTimer = null;
 let previouslyConnected;
 
@@ -25,7 +24,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
   if (navigator.serviceWorker) {
     navigator.serviceWorker.addEventListener('message', (event) => {
-      const { type, requestId, review, error } = event.data;
+      const {
+        type, requestId, review, error,
+      } = event.data;
       if (type === 'update-review') {
         if (error) {
           showToast('An error occurred while submitting your review', 'error');
@@ -35,7 +36,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
           updateReviewHTML(false, requestId, review);
         }
       }
-    })
+    });
   }
 
   if ('onLine' in navigator) {
@@ -113,7 +114,7 @@ const fetchRestaurantFromURL = (callback) => {
   }
   const id = getUrlParam('id');
   if (!id) { // no id found in URL
-    error = 'No restaurant id in URL';
+    const error = 'No restaurant id in URL';
     callback(error, null);
   } else {
     DBHelper.fetchRestaurantById(id, (error, restaurant) => {
@@ -213,8 +214,8 @@ const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hour
 };
 
 const markRestaurantAsFavourite = (button) => {
-  var icon = button.querySelector('i');
-  var text = button.querySelector('span');
+  const icon = button.querySelector('i');
+  const text = button.querySelector('span');
   text.innerHTML = 'Unmark restaurant as favourite';
   icon.classList.add('fas', 'marked');
   icon.classList.remove('far', 'unmarked');
@@ -222,8 +223,8 @@ const markRestaurantAsFavourite = (button) => {
 };
 
 const unmarkRestaurantAsFavourite = (button) => {
-  var icon = button.querySelector('i');
-  var text = button.querySelector('span');
+  const icon = button.querySelector('i');
+  const text = button.querySelector('span');
   text.innerHTML = 'Mark restaurant as favourite';
   icon.classList.add('far', 'unmarked');
   icon.classList.remove('fas', 'marked');
@@ -240,7 +241,6 @@ const fillMarkAsFavouriteHTML = (isFavourite = self.restaurant.is_favorite) => {
   } else {
     unmarkRestaurantAsFavourite(favouriteButton);
   }
-
 };
 
 /**
@@ -261,12 +261,11 @@ const fetchReviews = () => {
       DBHelper.getOutboxReviews(id, (error, outboxReviews) => {
         if (error) {
           console.log(error);
-          return;
         } else {
           self.outboxReviews = outboxReviews;
           fillSendingReviewsHTML();
         }
-      })
+      });
     });
   }
 };
@@ -275,25 +274,26 @@ const fetchReviews = () => {
  * Create all reviews HTML and add them to the webpage.
  */
 const fillReviewsHTML = (reviews = self.reviews) => {
+  const list = document.getElementById('reviews-list');
+
   if (!reviews || reviews.length === 0) {
     const noReviews = document.createElement('p');
     noReviews.innerHTML = 'No reviews yet!';
-    container.appendChild(noReviews);
+    list.appendChild(noReviews);
     return;
   }
-  const ul = document.getElementById('reviews-list');
   reviews.forEach((review) => {
-    ul.insertBefore(createReviewHTML(review), ul.firstChild);
+    list.insertBefore(createReviewHTML(review), list.firstChild);
   });
 };
 
 const fillSendingReviewsHTML = (outboxReviews = self.outboxReviews) => {
   if (!outboxReviews || outboxReviews.length === 0) return;
 
-  const ul = document.getElementById('reviews-list');
+  const list = document.getElementById('reviews-list');
   outboxReviews.forEach((outboxReview) => {
-    const { request_id, ...review } = outboxReview;
-    ul.insertBefore(createReviewHTML(review, true, request_id), ul.firstChild);
+    const { request_id: requestId, ...review } = outboxReview;
+    list.insertBefore(createReviewHTML(review, true, requestId), list.firstChild);
   });
 };
 
@@ -367,8 +367,8 @@ const updateReviewHTML = (error, requestId, review) => {
       date.classList.add('error');
     }
   } else {
-    const ul = document.getElementById('reviews-list');
-    if (ul && self.restaurant) { // only update if the restaurant is loaded
+    const list = document.getElementById('reviews-list');
+    if (list && self.restaurant) { // only update if the restaurant is loaded
       if (reviewElement) {
         reviewElement.classList.remove('sending');
         const date = reviewElement.querySelector('.review-date');
@@ -379,7 +379,7 @@ const updateReviewHTML = (error, requestId, review) => {
       }
     }
   }
-}
+};
 
 /**
  * Add restaurant name to the breadcrumb navigation menu
@@ -394,11 +394,9 @@ const fillBreadcrumb = (restaurant = self.restaurant) => {
 /**
  * Get a parameter by name from page URL.
  */
-const getUrlParam = (name, url) => {
-  url = url || window.location.href;
-  name = name.replace(/[\[\]]/g, '\\$&');
-  const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
-
+const getUrlParam = (name, url = window.location.href) => {
+  const paramName = name.replace(/[\[\]]/g, '\\$&');
+  const regex = new RegExp(`[?&]${paramName}(=([^&#]*)|&|#|$)`);
 
   const results = regex.exec(url);
   if (!results) return null;
@@ -410,13 +408,13 @@ const setMarkAsFavouriteFetchingState = (button, spinner) => {
   button.setAttribute('disabled', true);
   button.setAttribute('aria-busy', 'true');
   spinner.classList.add('show');
-}
+};
 
 const removeMarkAsFavouriteFetchingState = (button, spinner) => {
   button.removeAttribute('disabled');
   button.setAttribute('aria-busy', 'false');
   spinner.classList.remove('show');
-}
+};
 
 const toggleRestaurantAsFavourite = () => {
   const isFavourite = stringToBoolean(self.restaurant.is_favorite);
@@ -433,16 +431,20 @@ const toggleRestaurantAsFavourite = () => {
     failedUpdateCallback = markRestaurantAsFavourite;
   }
   setMarkAsFavouriteFetchingState(button, spinner);
-  DBHelper.setRestaurantFavouriteStatus(restaurantId, newIsFavourite, (error, updatedRestaurant) => {
-    removeMarkAsFavouriteFetchingState(button, spinner);
-    if (!updatedRestaurant) {
-      console.error(error);
-      failedUpdateCallback(button);
-      return;
-    }
-    self.restaurant = updatedRestaurant;
-  });
-}
+  DBHelper.setRestaurantFavouriteStatus(
+    restaurantId,
+    newIsFavourite,
+    (error, updatedRestaurant) => {
+      removeMarkAsFavouriteFetchingState(button, spinner);
+      if (!updatedRestaurant) {
+        console.error(error);
+        failedUpdateCallback(button);
+        return;
+      }
+      self.restaurant = updatedRestaurant;
+    },
+  );
+};
 
 function clearToastTimer() {
   clearTimeout(toastTimer);
@@ -455,7 +457,7 @@ function hideToast() {
   const toast = document.getElementById('toast');
   const toastText = document.getElementById('toast-text');
   toast.classList.remove('show');
-  setTimeout(function() {
+  setTimeout(() => {
     toastText.setAttribute('aria-live', 'polite');
   }, 0);
 }
@@ -479,14 +481,14 @@ function showToast(message, type) {
   }
 
   clearTimeout(toastTimer);
-  setTimeout(function() {
+  setTimeout(() => {
     toastText.setAttribute('aria-live', 'off');
   }, 0);
   toastTimer = setTimeout(hideToast, 10000);
 }
 
 function showConnectionStatus() {
-  var connectionStatus = document.getElementById('connectionStatus');
+  const connectionStatus = document.getElementById('connectionStatus');
 
   if (navigator.onLine && !previouslyConnected) { // user came back online
     showToast('You are back online', 'success');
