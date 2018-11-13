@@ -119,27 +119,26 @@ gulp.task('scripts-dist', () => {
       presets: ['@babel/env'],
     }))
     .pipe(sourcemaps.write())
-    .pipe(concat('main.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest('dist/js'));
 
-  gulp.src('src/js/restaurant_info.js')
+  gulp.src(['src/js/restaurant_info.js', 'src/js/helpers/addReviewModal.js'])
     .pipe(sourcemaps.init())
     .pipe(babel({
       presets: ['@babel/env'],
     }))
     .pipe(sourcemaps.write())
-    .pipe(concat('restaurant_info.min.js'))
+    .pipe(concat('restaurant_info.js'))
     .pipe(uglify())
     .pipe(gulp.dest('dist/js'));
 
-  gulp.src('src/js/helpers/*.js')
+  gulp.src(['src/js/helpers/swhelper.js', 'src/js/helpers/dbhelper.js', 'src/js/helpers/mischelpers.js', 'src/js/helpers/toasts.js', ''])
     .pipe(sourcemaps.init())
     .pipe(babel({
       presets: ['@babel/env'],
     }))
     .pipe(sourcemaps.write())
-    .pipe(concat('helpers.min.js'))
+    .pipe(concat('helpers.js'))
     .pipe(uglify())
     .pipe(gulp.dest('dist/js'));
 });
@@ -150,8 +149,19 @@ gulp.task('dist', [
   'copy-manifest',
   'sw-dist',
   'copy-svg',
+  'copy-gif',
   'styles',
   'scripts-dist',
 ]);
 
-gulp.task('default', ['grunt-imgs', 'copy-html', 'copy-manifest', 'sw', 'copy-svg', 'copy-gif', 'styles', 'scripts', 'serve']);
+gulp.task('default', [
+  'grunt-imgs',
+  'copy-html',
+  'copy-manifest',
+  'sw-dist',
+  'copy-svg',
+  'copy-gif',
+  'styles',
+  'scripts-dist',
+  'serve',
+]);
