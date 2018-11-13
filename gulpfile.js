@@ -18,7 +18,7 @@ require('gulp-grunt')(gulp, {
 gulp.task('serve', ['styles'], () => {
   gulp.watch('src/*.html', ['copy-html']);
   gulp.watch('src/scss/*.scss', ['styles']);
-  gulp.watch('src/js/*.js', ['scripts-dist']);
+  gulp.watch('src/js/**/*.js', ['scripts-dist']);
   gulp.watch('src/service-worker.js', ['sw-dist']);
   gulp.watch('dist/*.html').on('change', browserSync.reload);
   gulp.watch('dist/js/**/*.js').on('change', browserSync.reload);

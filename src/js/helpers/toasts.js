@@ -11,7 +11,7 @@ function pauseToastTimer() {
 function restartToastTimer() {
   if (shouldRestartToastTimer) {
     shouldRestartToastTimer = false;
-    setTimeout(hideToast, 2000);
+    toastTimer = setTimeout(hideToast, 2000);
   }
 }
 
@@ -21,11 +21,6 @@ function enqueueToast(message, type) {
   if (toastTimer === null) { // no toast is currently showing
     showToast();
   }
-}
-
-function showDummyToast() {
-  const str = `${Math.random()}`;
-  enqueueToast(str);
 }
 
 function hideToast() {
