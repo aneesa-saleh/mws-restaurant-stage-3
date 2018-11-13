@@ -129,9 +129,9 @@
         </div>
         <div class="form-group">
           <label for="rating">Restaurant rating<br/>
-            <input name="rating" id="rating" type="range" min=0 max=5 step=1 value=0 onkeyup="handleInputKeyUp(event)" onblur="handleInputBlur(event)" onchange="handleRangeChange(event)" required aria-required="true" aria-invalid="false">
+            <input name="rating" id="rating" type="range" min=0 max=5 step=1 value=0 onkeyup="handleInputKeyUp(event)" onblur="handleInputBlur(event)" onchange="handleRangeChange(event)" required aria-valuemin="1" aria-valuemax="5" aria-required="true" aria-invalid="false">
           </label>
-          <span class="rating-value">0.0</span>
+          <span class="rating-value">0/5</span>
           <span id="rating-error" class="form-error" aria-live="polite">This field is required</span>
         </div>
         <div class="form-group">

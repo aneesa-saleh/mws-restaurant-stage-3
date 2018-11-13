@@ -149,7 +149,7 @@ function validateAllInputs() {
 
 function handleRangeChange(event) {
   const ratingValue = document.querySelector('.rating-value');
-  ratingValue.innerHTML = `${event.target.value}.0`;
+  ratingValue.innerHTML = `${event.target.value}/5`;
   validateInput(event.target.name, event.target.value);
 }
 
@@ -178,7 +178,7 @@ function getFormInputValues() {
 function clearForm() {
   document.getElementById('name').value = '';
   document.getElementById('rating').value = '0';
-  document.querySelector('.rating-value').innerHTML = '0.0';
+  document.querySelector('.rating-value').innerHTML = '0/5';
   document.getElementById('comments').value = '';
 }
 
