@@ -439,15 +439,12 @@ nav {
 }
 
 /***** opening hours *****/
-.reviews-container h2,
+.reviews-container h3,
 .opening-hours-container caption {
   font-size: 20px;
   font-weight: 400;
   letter-spacing: 1px;
 	margin: 10px 0;
-}
-
-.opening-hours-container caption {
 	color: #A66317;
 }
 
@@ -470,7 +467,7 @@ nav {
 } /* .restaurant-hours */
 
 @media screen and (min-width: 600px) {
-	.reviews-container h2,
+	.reviews-container h3,
 	.opening-hours-container caption {
 	  font-size: 22px;
 	}
@@ -482,7 +479,7 @@ nav {
 		width: calc(50% - 20px);
 	}
 
-	.reviews-container h2,
+	.reviews-container h3,
 	.opening-hours-container caption {
 	  font-size: 24px;
 	}
@@ -525,7 +522,7 @@ nav {
 	background-color: #4c4c4c;
 }
 
-.reviews-container h2 {
+.reviews-container h3 {
 	float: left;
 	margin-top: 5px;
 }
@@ -542,7 +539,7 @@ nav {
 		float: none;
 	}
 
-	.reviews-container h2 {
+	.reviews-container h3 {
 		margin-top: 0;
 		float: none;
 	}
@@ -613,7 +610,7 @@ nav {
 .review-date {
 	color: white;
 	float: right;
-	font-size: 11pt;
+	font-size: 12pt;
 	font-weight: 200;
 
 	&.error {
@@ -630,7 +627,7 @@ nav {
 	border-radius: 2px;
 	color: white;
 	display: inline-block;
-	font-size: 11pt;
+	font-size: 12pt;
 	letter-spacing: 1px;
 	padding: 3px 10px;
 	text-transform: uppercase;

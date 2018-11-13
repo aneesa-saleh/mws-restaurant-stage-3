@@ -37,7 +37,7 @@
   <header>
     <h1><a href="/">Restaurant Reviews</a></h1>
     <!-- Beginning nav -->
-    <nav>
+    <nav aria-label="breadcrumb" role="navigation">
       <!-- Beginning breadcrumb -->
       <ul id="breadcrumb" class="breadcrumb" >
         <li><a href="/">Home</a></li>
@@ -49,12 +49,12 @@
   <!-- End header -->
 
   <!-- Beginning main -->
-  <main class="main-content">
+  <main class="main-content" role="main">
     <img src="/img/spinner.gif" alt="Page loading" id="main-spinner" class="main-spinner spinner show">
     <h2 id="main-error" class="main-error" aria-live="polite">404. Restaurant Not Found.</h2>
     <!-- Beginning wrap main content -->
     <div id="wrap-main-content" class="wrap-main-content hide">
-      <h1 id="restaurant-name" class="restaurant-name"></h1>
+      <h2 id="restaurant-name" class="restaurant-name"></h2>
       <!-- Beginning accesible restaurant container -->
       <div id="accessible-restaurant-container" class="off-screen">
         <span role="img" id="accessible-restaurant-img"></span>
@@ -63,7 +63,7 @@
       <!-- End accesible restaurant container -->
       <!-- Beginning map -->
       <section class="map-container">
-        <div id="map" class="map" aria-describedby="restaurant-address"></div>
+        <div id="map" class="map" aria-describedby="restaurant-address" role="application"></div>
         <p id="restaurant-address" class="restaurant-address">
           <span class="off-screen">Address:</span>
         </p>
@@ -98,7 +98,7 @@
       <!-- Beginning reviews -->
       <section id="reviews-container" class="reviews-container">
         <div class="reviews-heading-container">
-          <h2>Reviews</h2>
+          <h3>Reviews</h3>
           <button type="button" class="add-review-button" id="add-review-button" onclick="openModal()">Add Review</button>
         </div>
         <div id="reviews-list" class="reviews-list"></div>
@@ -110,7 +110,7 @@
   <!-- End main -->
 
   <!-- Beginning footer -->
-  <footer class="footer">
+  <footer class="footer" role="contentinfo">
     Copyright Ⓒ 2017 <strong>Restaurant Reviews</strong> All Rights Reserved.
   </footer>
   <!-- End footer -->
@@ -118,7 +118,7 @@
   <!-- Beginning modal -->
   <div class="overlay">
     <div class="overlay-content">
-      <h2 class="overlay-heading" id="add-review-overlay-heading" disabled="true">Add Review</h2>
+      <h3 class="overlay-heading" id="add-review-overlay-heading" disabled="true">Add Review</h2>
       <form class="overlay-form" onsubmit="handleFormSubmit(event)">
         <div class="form-group">
           <label for="name">
