@@ -26,7 +26,7 @@ gulp.task('serve', ['styles'], () => {
 
   browserSync.init({
     server: 'dist',
-    port: 8004,
+    port: 8006,
   });
 });
 
@@ -145,6 +145,7 @@ gulp.task('scripts-dist', () => {
 
 gulp.task('dist', [
   'grunt-imgs',
+  'grunt-favicons',
   'copy-html',
   'copy-manifest',
   'sw-dist',
@@ -155,7 +156,6 @@ gulp.task('dist', [
 ]);
 
 gulp.task('default', [
-  'grunt-imgs',
   'copy-html',
   'copy-manifest',
   'sw-dist',

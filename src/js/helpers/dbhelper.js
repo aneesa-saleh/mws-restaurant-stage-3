@@ -246,8 +246,10 @@ class DBHelper {
   static imageUrlForRestaurant(restaurant, options) {
     if (options) {
       if (options.size === 'small') {
+        if (options.singleValue === true) return `img/${restaurant.photograph_small_2x}`;
         return `img/${restaurant.photograph_small_1x} 1x, img/${restaurant.photograph_small_2x} 2x`;
       } if (options.size === 'medium') {
+        if (options.singleValue === true) return `img/${restaurant.photograph_medium_2x}`;
         return `img/${restaurant.photograph_medium_1x} 1x, img/${restaurant.photograph_medium_2x} 2x`;
       } if (options.size === 'large' && options.wide) {
         return `img/${restaurant.photograph_large_wide}`;

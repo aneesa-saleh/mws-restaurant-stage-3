@@ -23,6 +23,11 @@ function enqueueToast(message, type) {
   }
 }
 
+function showDummyToast() {
+  const str = `${Math.random()}`;
+  enqueueToast(str);
+}
+
 function hideToast() {
   clearTimeout(toastTimer);
   toastTimer = null;

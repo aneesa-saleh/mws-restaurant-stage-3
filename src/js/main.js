@@ -12,7 +12,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
   fetchNeighborhoods();
   fetchCuisines();
   registerServiceWorker();
-  setInterval(cleanMapboxTilesCache, 5000);
+
+  if (window.caches) {
+    setInterval(cleanMapboxTilesCache, 5000);
+  }
 });
 
 /**
@@ -168,7 +171,8 @@ const createRestaurantHTML = (restaurant) => {
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   // set default size in case picture element is not supported
-  image.src = DBHelper.imageUrlForRestaurant(restaurant, { size: 'medium' });
+  image.srcset = DBHelper.imageUrlForRestaurant(restaurant, { size: 'medium' });
+  image.src = DBHelper.imageUrlForRestaurant(restaurant, { size: 'medium', singleValue: true });
   image.alt = restaurant.alt;
   picture.appendChild(image);
 

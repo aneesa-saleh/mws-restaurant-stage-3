@@ -1,10 +1,6 @@
 function setup(grunt) {
   grunt.initConfig({
     favicons: {
-      options: {
-        html: 'src/index.html',
-        HTMLPrefix: 'img/favicon/',
-      },
       icons: {
         src: 'src/img/restaurant.png',
         dest: 'dist/img/favicon',
