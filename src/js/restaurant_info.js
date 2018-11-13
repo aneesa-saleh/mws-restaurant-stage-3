@@ -13,9 +13,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
   previouslyConnected = navigator.onLine;
 
   initMap();
-  // if (window.matchMedia) {
-  //   matchesMediaQuery = window.matchMedia(mediaQuery).matches;
-  // }
+  if (window.matchMedia) {
+    matchesMediaQuery = window.matchMedia(mediaQuery).matches;
+  }
   updateRestaurantContainerAria(); // set initial aria values
   registerServiceWorker();
 
