@@ -142,8 +142,30 @@ const fillRestaurantsHTML = (restaurants = self.restaurants) => {
   restaurants.forEach((restaurant) => {
     ul.append(createRestaurantHTML(restaurant));
   });
+  registerObserver(document.querySelectorAll('#restaurants-list picture'), loadPicture);
   addMarkersToMap();
 };
+
+function loadPicture(picture) {
+  const {
+    src, srcset, srcset_small: srcsetSmall, srcset_medium: srcsetMedium,
+  } = picture.dataset;
+
+  const sourceMedium = picture.querySelector('source[data-size="medium"]');
+  const sourceSmall = picture.querySelector('source[data-size="small"]');
+  const img = picture.querySelector('img');
+
+  const { alt } = img.dataset;
+
+  sourceMedium.srcset = srcsetMedium;
+  sourceSmall.srcset = srcsetSmall;
+
+  img.srcset = srcset;
+  img.src = src;
+
+  img.setAttribute('aria-busy', 'false');
+  img.alt = alt;
+}
 
 /**
  * Create restaurant HTML.
@@ -151,29 +173,37 @@ const fillRestaurantsHTML = (restaurants = self.restaurants) => {
 const createRestaurantHTML = (restaurant) => {
   const article = document.createElement('article');
 
+  // for picture element, we leave src and srcset attributes of the source and image elements empty
+  // IntersectionObserver will be used to lazy load the images by setting their src and srcset
+  // as they enter the viewport
   const picture = document.createElement('picture');
 
   // a two-column layout is used for larger viewports
   // medium images are displayed for wide single-column (451px - 749px) and wide 2-column viewports (>= 950px)
   const sourceMedium = document.createElement('source');
   sourceMedium.media = '(min-width: 451px) and (max-width: 749px), (min-width: 950px)';
-  sourceMedium.srcset = DBHelper.imageUrlForRestaurant(restaurant, { size: 'medium' });
   sourceMedium.type = 'image/jpeg';
+  sourceMedium.setAttribute('data-size', 'medium');
+  picture.setAttribute('data-srcset_medium', DBHelper.imageUrlForRestaurant(restaurant, { size: 'medium' }));
   picture.appendChild(sourceMedium);
 
   // small images are displayed for small single-column (<= 450px) and small 2-column viewports (750px - 949px)
   const sourceSmall = document.createElement('source');
   sourceSmall.media = '(max-width: 450px), (min-width: 750px) and (max-width: 949px)';
-  sourceSmall.srcset = DBHelper.imageUrlForRestaurant(restaurant, { size: 'small' });
   sourceSmall.type = 'image/jpeg';
+  sourceSmall.setAttribute('data-size', 'small');
+  picture.setAttribute('data-srcset_small', DBHelper.imageUrlForRestaurant(restaurant, { size: 'small' }));
   picture.appendChild(sourceSmall);
 
   const image = document.createElement('img');
-  image.className = 'restaurant-img';
+  image.classList.add('restaurant-img');
   // set default size in case picture element is not supported
-  image.srcset = DBHelper.imageUrlForRestaurant(restaurant, { size: 'medium' });
-  image.src = DBHelper.imageUrlForRestaurant(restaurant, { size: 'medium', singleValue: true });
-  image.alt = restaurant.alt;
+  picture.setAttribute('data-srcset', DBHelper.imageUrlForRestaurant(restaurant, { size: 'medium' }));
+  picture.setAttribute('data-src', DBHelper.imageUrlForRestaurant(restaurant, { size: 'medium', singleValue: true }));
+  image.setAttribute('data-alt', restaurant.alt);
+  image.setAttribute('aria-busy', 'true');
+  image.alt = '';
+
   picture.appendChild(image);
 
   article.append(picture);

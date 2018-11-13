@@ -330,8 +330,15 @@ nav {
 		margin: 0;
 		max-width: 100%;
 		min-width: 100%;
+		min-height: 220px;
 	}
 } /* .restaurant-list */
+
+@media screen and (min-width: 800px) {
+	.restaurant-img {
+		min-height: 300px;
+	}
+}
 
 @media screen and (min-width: 750px) {
 	.restaurants-list {

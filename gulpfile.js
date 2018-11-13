@@ -98,7 +98,13 @@ gulp.task('scripts', () => {
     .pipe(concat('restaurant_info.js'))
     .pipe(gulp.dest('dist/js'));
 
-  gulp.src(['src/js/helpers/swhelper.js', 'src/js/helpers/dbhelper.js', 'src/js/helpers/mischelpers.js', 'src/js/helpers/toasts.js', ''])
+  gulp.src([
+    'src/js/helpers/swhelper.js',
+    'src/js/helpers/dbhelper.js',
+    'src/js/helpers/mischelpers.js',
+    'src/js/helpers/toasts.js',
+    'src/js/helpers/lazyLoad.js',
+  ])
     .pipe(babel({
       presets: ['@babel/env'],
     }))
@@ -108,32 +114,38 @@ gulp.task('scripts', () => {
 
 gulp.task('scripts-dist', () => {
   gulp.src('src/js/main.js')
-    .pipe(sourcemaps.init())
+    // .pipe(sourcemaps.init())
     .pipe(babel({
       presets: ['@babel/env'],
     }))
     .pipe(uglify())
-    .pipe(sourcemaps.write())
+    // .pipe(sourcemaps.write())
     .pipe(gulp.dest('dist/js'));
 
   gulp.src(['src/js/restaurant_info.js', 'src/js/helpers/addReviewModal.js'])
-    .pipe(sourcemaps.init())
+    // .pipe(sourcemaps.init())
     .pipe(babel({
       presets: ['@babel/env'],
     }))
     .pipe(concat('restaurant_info.js'))
     .pipe(uglify())
-    .pipe(sourcemaps.write())
+    // .pipe(sourcemaps.write())
     .pipe(gulp.dest('dist/js'));
 
-  gulp.src(['src/js/helpers/swhelper.js', 'src/js/helpers/dbhelper.js', 'src/js/helpers/mischelpers.js', 'src/js/helpers/toasts.js', ''])
-    .pipe(sourcemaps.init())
+  gulp.src([
+    'src/js/helpers/swhelper.js',
+    'src/js/helpers/dbhelper.js',
+    'src/js/helpers/mischelpers.js',
+    'src/js/helpers/toasts.js',
+    'src/js/helpers/lazyLoad.js',
+  ])
+    // .pipe(sourcemaps.init())
     .pipe(babel({
       presets: ['@babel/env'],
     }))
     .pipe(concat('helpers.js'))
     .pipe(uglify())
-    .pipe(sourcemaps.write())
+    // .pipe(sourcemaps.write())
     .pipe(gulp.dest('dist/js'));
 });
 
