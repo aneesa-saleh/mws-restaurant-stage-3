@@ -18,10 +18,10 @@ require('gulp-grunt')(gulp, {
 gulp.task('serve', ['styles'], () => {
   gulp.watch('src/*.html', ['copy-html']);
   gulp.watch('src/scss/*.scss', ['styles']);
-  gulp.watch('src/js/*.js', ['scripts']);
-  gulp.watch('src/service-worker.js', ['sw']);
+  gulp.watch('src/js/*.js', ['scripts-dist']);
+  gulp.watch('src/service-worker.js', ['sw-dist']);
   gulp.watch('dist/*.html').on('change', browserSync.reload);
-  gulp.watch('dist/js/*.js').on('change', browserSync.reload);
+  gulp.watch('dist/js/**/*.js').on('change', browserSync.reload);
   gulp.watch('dist/css/*.css').on('change', browserSync.reload);
 
   browserSync.init({
@@ -79,35 +79,29 @@ gulp.task('sw-dist', () => {
     .pipe(babel({
       presets: ['@babel/env'],
     }))
-    .pipe(sourcemaps.write())
     .pipe(uglify())
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest('dist'));
 });
 
 gulp.task('scripts', () => {
   gulp.src('src/js/main.js')
-    .pipe(sourcemaps.init())
     .pipe(babel({
       presets: ['@babel/env'],
     }))
-    .pipe(sourcemaps.write())
     .pipe(gulp.dest('dist/js'));
 
   gulp.src(['src/js/restaurant_info.js', 'src/js/helpers/addReviewModal.js'])
-    .pipe(sourcemaps.init())
     .pipe(babel({
       presets: ['@babel/env'],
     }))
-    .pipe(sourcemaps.write())
     .pipe(concat('restaurant_info.js'))
     .pipe(gulp.dest('dist/js'));
 
   gulp.src(['src/js/helpers/swhelper.js', 'src/js/helpers/dbhelper.js', 'src/js/helpers/mischelpers.js', 'src/js/helpers/toasts.js', ''])
-    .pipe(sourcemaps.init())
     .pipe(babel({
       presets: ['@babel/env'],
     }))
-    .pipe(sourcemaps.write())
     .pipe(concat('helpers.js'))
     .pipe(gulp.dest('dist/js'));
 });
@@ -118,8 +112,8 @@ gulp.task('scripts-dist', () => {
     .pipe(babel({
       presets: ['@babel/env'],
     }))
-    .pipe(sourcemaps.write())
     .pipe(uglify())
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest('dist/js'));
 
   gulp.src(['src/js/restaurant_info.js', 'src/js/helpers/addReviewModal.js'])
@@ -127,9 +121,9 @@ gulp.task('scripts-dist', () => {
     .pipe(babel({
       presets: ['@babel/env'],
     }))
-    .pipe(sourcemaps.write())
     .pipe(concat('restaurant_info.js'))
     .pipe(uglify())
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest('dist/js'));
 
   gulp.src(['src/js/helpers/swhelper.js', 'src/js/helpers/dbhelper.js', 'src/js/helpers/mischelpers.js', 'src/js/helpers/toasts.js', ''])
@@ -137,9 +131,9 @@ gulp.task('scripts-dist', () => {
     .pipe(babel({
       presets: ['@babel/env'],
     }))
-    .pipe(sourcemaps.write())
     .pipe(concat('helpers.js'))
     .pipe(uglify())
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest('dist/js'));
 });
 
