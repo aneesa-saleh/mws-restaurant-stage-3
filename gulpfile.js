@@ -8,6 +8,7 @@ const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
 const babel = require('gulp-babel');
 const sourcemaps = require('gulp-sourcemaps');
+const htmlmin = require('gulp-htmlmin');
 
 const path = require('path');
 
@@ -50,6 +51,7 @@ gulp.task('copy-serve-config', () => {
 
 gulp.task('copy-html', () => {
   gulp.src('src/*.html')
+    .pipe(htmlmin({ collapseWhitespace: true }))
     .pipe(gulp.dest('dist'));
 });
 
@@ -168,6 +170,7 @@ gulp.task('dist', [
 
 gulp.task('default', [
   'copy-html',
+  'copy-serve-config',
   'copy-manifest',
   'sw-dist',
   'copy-svg',

@@ -6,6 +6,7 @@
   "keywords": [],
   "dependencies": {
     "grunt-favicons": "^0.8.0",
+    "gulp-htmlmin": "^5.0.1",
     "include-all": "^1.0.0",
     "rc": "1.0.1",
     "sails": "^0.12.13",

@@ -1,5 +1,6 @@
 {
-  "cleanUrls": false,
+  "directoryListing": false,
+  "cleanUrls": ["index.html"],
   "headers": [
     {
       "source" : "**/*.@(jpe?g|gif|png|css|js)",
