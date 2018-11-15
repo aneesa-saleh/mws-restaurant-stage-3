@@ -3,10 +3,14 @@ importScripts('/js/helpers.js', 'https://cdn.jsdelivr.net/npm/idb@2.1.3/lib/idb.
 const staticCacheName = 'restaurant-reviews-static-v5';
 const restaurantImagesCache = 'restaurant-reviews-restaurant-images';
 const mapboxTilesCache = 'restaurant-reviews-map-tiles';
+const fontsCache = 'restaurant-reviews-fonts';
+const fontAwesomeCache = 'font-awesome';
 const allCaches = [
   staticCacheName,
   restaurantImagesCache,
   mapboxTilesCache,
+  fontsCache,
+  fontAwesomeCache,
 ];
 
 self.addEventListener('install', (event) => {
@@ -22,11 +26,12 @@ self.addEventListener('install', (event) => {
       '/img/offline.svg',
       '/img/offline_wide.svg',
       '/img/spinner.gif',
+      '/img/restaurant_map_tiny.png',
+      '/img/restaurants_map_tiny.png',
       'https://cdn.rawgit.com/jakearchibald/idb/master/lib/idb.js',
-      'https://use.fontawesome.com/releases/v5.5.0/css/all.css',
       'https://unpkg.com/leaflet@1.3.1/dist/leaflet.css',
       'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js',
-      'https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700',
+      'https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700',
       'https://unpkg.com/leaflet@1.3.1/dist/images/marker-icon.png',
       'https://unpkg.com/leaflet@1.3.1/dist/images/marker-icon-2x.png',
       'https://unpkg.com/leaflet@1.3.1/dist/images/marker-shadow.png',
@@ -60,23 +65,25 @@ self.addEventListener('message', (event) => {
   }
 });
 
-self.addEventListener('sync', function (event) {
+self.addEventListener('sync', (event) => {
   event.waitUntil(
     dbPromise.then((db) => {
       const requestId = event.tag;
       let outboxStore = db.transaction('outbox').objectStore('outbox');
       outboxStore.get(requestId).then((request) => {
-        const { restaurant_id, name, rating, comments } = request;
+        const {
+          restaurant_id, name, rating, comments,
+        } = request;
         return DBHelper.addReview(restaurant_id, name, rating, comments, (error, newReview) => {
           if (error) {
             // broadcast update to all clients
             self.clients.matchAll().then((clients) => {
               clients.forEach((client) => {
-                  client.postMessage({
-                    type: 'update-review',
-                    error: true,
-                    requestId,
-                  });
+                client.postMessage({
+                  type: 'update-review',
+                  error: true,
+                  requestId,
+                });
               });
             });
             // delete review from outbox store
@@ -86,11 +93,11 @@ self.addEventListener('sync', function (event) {
             // broadcast update to all clients
             self.clients.matchAll().then((clients) => {
               clients.forEach((client) => {
-                  client.postMessage({
-                    type: 'update-review',
-                    review: newReview,
-                    requestId,
-                  });
+                client.postMessage({
+                  type: 'update-review',
+                  review: newReview,
+                  requestId,
+                });
               });
             });
             // add review to reviews store
@@ -100,9 +107,9 @@ self.addEventListener('sync', function (event) {
             outboxStore = db.transaction('outbox', 'readwrite').objectStore('outbox');
             outboxStore.delete(requestId);
           }
-        })
-      })
-    })
+        });
+      });
+    }),
   );
 });
 
@@ -124,6 +131,12 @@ self.addEventListener('fetch', (event) => {
     }
   } else if (requestUrl.origin === 'https://api.tiles.mapbox.com') {
     event.respondWith(serveMapboxTiles(event.request));
+    return;
+  } else if (requestUrl.origin === 'https://fonts.gstatic.com') {
+    event.respondWith(serveFonts(event.request));
+    return;
+  } else if (requestUrl.origin === 'https://use.fontawesome.com') {
+    event.respondWith(serveFontAwesome(event.request));
     return;
   }
 
@@ -157,6 +170,30 @@ const serveRestaurantImage = (request) => {
 };
 
 const serveMapboxTiles = request => caches.open(mapboxTilesCache).then(
+  cache => cache.match(request.url).then((response) => {
+    if (response) return response;
+
+    // if request isn't cached, cache it when fetch response is returned
+    return fetch(request).then((networkResponse) => {
+      cache.put(request.url, networkResponse.clone());
+      return networkResponse;
+    });
+  }),
+);
+
+const serveFonts = request => caches.open(fontsCache).then(
+  cache => cache.match(request.url).then((response) => {
+    if (response) return response;
+
+    // if request isn't cached, cache it when fetch response is returned
+    return fetch(request).then((networkResponse) => {
+      cache.put(request.url, networkResponse.clone());
+      return networkResponse;
+    });
+  }),
+);
+
+const serveFontAwesome = request => caches.open(fontAwesomeCache).then(
   cache => cache.match(request.url).then((response) => {
     if (response) return response;
 
