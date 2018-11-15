@@ -3,12 +3,19 @@ let neighborhoods;
 let cuisines;
 let newMap;
 const markers = [];
+let mapInitialized = false;
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
-  initMap();
+  newMap = L.map('map', {
+    center: [40.722216, -73.987501],
+    zoom: 12,
+    scrollWheelZoom: false,
+  });
+
+  updateRestaurants();
   fetchNeighborhoods();
   fetchCuisines();
   registerServiceWorker();
@@ -76,22 +83,16 @@ const fillCuisinesHTML = (cuisines = self.cuisines) => {
  * Initialize leaflet map, called from HTML.
  */
 const initMap = () => {
+  mapInitialized = true;
   const MAPBOX_API_KEY = 'pk.eyJ1IjoiYW5lZXNhLXNhbGVoIiwiYSI6ImNqa2xmZHVwMDFoYW4zdnAwYWplMm53bHEifQ.V11dDOtEnWSwTxY-C8mJLw';
-  self.newMap = L.map('map', {
-    center: [40.722216, -73.987501],
-    zoom: 12,
-    scrollWheelZoom: false,
-  });
-  L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
-    mapboxToken: MAPBOX_API_KEY,
-    maxZoom: 18,
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, '
-      + '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, '
-      + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    id: 'mapbox.streets',
-  }).addTo(newMap);
-
-  updateRestaurants();
+  // L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
+  //   mapboxToken: MAPBOX_API_KEY,
+  //   maxZoom: 18,
+  //   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, '
+  //     + '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, '
+  //     + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+  //   id: 'mapbox.streets',
+  // }).addTo(newMap);
 };
 
 /**
@@ -115,6 +116,10 @@ const updateRestaurants = () => {
       fillRestaurantsHTML();
     }
   });
+
+  if (!mapInitialized) {
+    initMap();
+  }
 };
 
 /**
