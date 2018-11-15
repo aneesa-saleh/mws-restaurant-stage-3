@@ -9,7 +9,7 @@ function pauseToastTimer() {
 }
 
 function restartToastTimer() {
-  if (shouldRestartToastTimer) {
+  if (shouldRestartToastTimer) { // this check is necessary in case toast was closed
     shouldRestartToastTimer = false;
     toastTimer = setTimeout(hideToast, 2000);
   }
@@ -64,5 +64,5 @@ function showToast() {
   setTimeout(() => {
     toastText.setAttribute('aria-live', 'off');
   }, 0);
-  toastTimer = setTimeout(hideToast, 10000);
+  toastTimer = setTimeout(hideToast, 8000);
 }

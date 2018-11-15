@@ -273,6 +273,9 @@ class DBHelper {
     return marker;
   }
 
+  /**
+   * Mark or unmark a restaurant as favourite
+   */
   static setRestaurantFavouriteStatus(restaurantId, status, callback) {
     const setFavouriteStatusUrl = `${DBHelper.DATABASE_URL}/restaurants/${restaurantId}/?is_favorite=${status}`;
     fetch(setFavouriteStatusUrl, { method: 'PUT' }).then((response) => {
@@ -291,6 +294,9 @@ class DBHelper {
     });
   }
 
+  /**
+   * Add a review for a restaurant
+   */
   static addReview(restaurantId, name, rating, comments, callback) {
     const addReviewUrl = `${DBHelper.DATABASE_URL}/reviews`;
     const body = JSON.stringify({
@@ -312,6 +318,9 @@ class DBHelper {
     });
   }
 
+  /**
+   * Get reviews that have been saved offline
+   */
   static getOutboxReviews(restaurantId, callback) {
     dbPromise.then((db) => {
       if (!db) {

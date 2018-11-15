@@ -1,6 +1,6 @@
-let restaurants = [];
-let neighborhoods = [];
-let cuisines = [];
+let restaurants;
+let neighborhoods;
+let cuisines;
 let newMap;
 const markers = [];
 let mapInitialized = false;
@@ -155,6 +155,7 @@ const fillRestaurantsHTML = (restaurants = self.restaurants) => {
   restaurants.forEach((restaurant) => {
     ul.append(createRestaurantHTML(restaurant));
   });
+  // register observer after the picture elements have been loaded
   registerObserver(document.querySelectorAll('#restaurants-list picture'), loadPicture);
 };
 

@@ -5,16 +5,18 @@ let newMap;
 let matchesMediaQuery = true;
 const mediaQuery = '(min-width: 800px)';
 let previouslyConnected;
+// this will be used as a safe `this` for currying using func.bind
+// Fallback `this` would be window otherwise
 const ø = Object.create(null);
 
-/**
- * Initialize map as soon as the page is loaded.
- */
+
 document.addEventListener('DOMContentLoaded', (event) => {
   previouslyConnected = navigator.onLine;
+
   if (window.matchMedia) {
     matchesMediaQuery = window.matchMedia(mediaQuery).matches;
   }
+
   updateRestaurantContainerAria(); // set initial aria values
   registerServiceWorker();
 
@@ -299,8 +301,8 @@ const fillSendingReviewsHTML = (outboxReviews = self.outboxReviews) => {
 
   const ul = document.getElementById('reviews-list');
   outboxReviews.forEach((outboxReview) => {
-    const { request_id, ...review } = outboxReview;
-    ul.insertBefore(createReviewHTML(review, true, request_id), ul.firstChild);
+    const { request_id: requestId, ...review } = outboxReview;
+    ul.insertBefore(createReviewHTML(review, true, requestId), ul.firstChild);
   });
 };
 
@@ -431,15 +433,15 @@ const toggleRestaurantAsFavourite = () => {
   const restaurantId = self.restaurant.id;
   const button = document.getElementById('mark-as-favourite');
   const spinner = document.getElementById('favourite-spinner');
-  let failedUpdateCallback;
+  let failedUpdateCallback; // function to revert UI if failed
   let successMessage;
   let errorMessage;
-  if (newIsFavourite) {
+  if (newIsFavourite) { // user is marking the restaurant as favourite
     markRestaurantAsFavourite(button);
     failedUpdateCallback = unmarkRestaurantAsFavourite;
     successMessage = 'Restaurant has been marked as favourite';
     errorMessage = 'An error occurred marking restaurant as favourite';
-  } else {
+  } else { // user is unmarking the restaurant as favourite
     unmarkRestaurantAsFavourite(button);
     failedUpdateCallback = markRestaurantAsFavourite;
     successMessage = 'Restaurant has been unmarked as favourite';

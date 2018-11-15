@@ -1,5 +1,8 @@
 let loadElement = () => {};
 
+/**
+ * Function to call when an element comes into focus
+ */
 function handleIntersection(entries, observer) {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
@@ -14,11 +17,7 @@ function handleIntersection(entries, observer) {
 
 function registerObserver(elementsToObserve, loadElementCallback) {
   loadElement = loadElementCallback;
-  const options = {
-    threshold: 0.1,
-    rootMargin: '0px',
-  };
-  const observer = new IntersectionObserver(handleIntersection, options);
+  const observer = new IntersectionObserver(handleIntersection);
   elementsToObserve.forEach((element) => {
     observer.observe(element);
   });
