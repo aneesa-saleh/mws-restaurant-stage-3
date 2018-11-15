@@ -5,7 +5,9 @@ function handleIntersection(entries, observer) {
     if (entry.isIntersecting) {
       const element = entry.target;
       observer.unobserve(element);
-      loadElement(element);
+      requestAnimationFrame(() => {
+        loadElement(element);
+      });
     }
   });
 }

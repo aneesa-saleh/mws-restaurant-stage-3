@@ -1,20 +1,14 @@
-let restaurants;
-let neighborhoods;
-let cuisines;
+let restaurants = [];
+let neighborhoods = [];
+let cuisines = [];
 let newMap;
 const markers = [];
 let mapInitialized = false;
-
+const ø = Object.create(null);
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
-  newMap = L.map('map', {
-    center: [40.722216, -73.987501],
-    zoom: 12,
-    scrollWheelZoom: false,
-  });
-
   updateRestaurants();
   fetchNeighborhoods();
   fetchCuisines();
@@ -83,16 +77,21 @@ const fillCuisinesHTML = (cuisines = self.cuisines) => {
  * Initialize leaflet map, called from HTML.
  */
 const initMap = () => {
-  mapInitialized = true;
+  self.newMap = L.map('map', {
+    center: [40.722216, -73.987501],
+    zoom: 12,
+    scrollWheelZoom: false,
+  });
   const MAPBOX_API_KEY = 'pk.eyJ1IjoiYW5lZXNhLXNhbGVoIiwiYSI6ImNqa2xmZHVwMDFoYW4zdnAwYWplMm53bHEifQ.V11dDOtEnWSwTxY-C8mJLw';
-  // L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
-  //   mapboxToken: MAPBOX_API_KEY,
-  //   maxZoom: 18,
-  //   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, '
-  //     + '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, '
-  //     + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-  //   id: 'mapbox.streets',
-  // }).addTo(newMap);
+  L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
+    mapboxToken: MAPBOX_API_KEY,
+    maxZoom: 18,
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, '
+      + '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, '
+      + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    id: 'mapbox.streets',
+  }).addTo(newMap);
+  mapInitialized = true;
 };
 
 /**
@@ -112,14 +111,13 @@ const updateRestaurants = () => {
     if (error) { // Got an error!
       console.error(error);
     } else {
-      resetRestaurants(restaurants);
-      fillRestaurantsHTML();
+      requestAnimationFrame(fillRestaurantsHTML.bind(ø, restaurants));
+      if (!mapInitialized) {
+        requestAnimationFrame(initMap);
+      }
+      requestAnimationFrame(addMarkersToMap.bind(ø, restaurants));
     }
   });
-
-  if (!mapInitialized) {
-    initMap();
-  }
 };
 
 /**
@@ -143,12 +141,12 @@ const resetRestaurants = (restaurants) => {
  * Create all restaurants HTML and add them to the webpage.
  */
 const fillRestaurantsHTML = (restaurants = self.restaurants) => {
+  resetRestaurants(restaurants);
   const ul = document.getElementById('restaurants-list');
   restaurants.forEach((restaurant) => {
     ul.append(createRestaurantHTML(restaurant));
   });
   registerObserver(document.querySelectorAll('#restaurants-list picture'), loadPicture);
-  addMarkersToMap();
 };
 
 function loadPicture(picture) {

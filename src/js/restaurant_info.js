@@ -5,14 +5,13 @@ let newMap;
 let matchesMediaQuery = true;
 const mediaQuery = '(min-width: 800px)';
 let previouslyConnected;
+const ø = Object.create(null);
 
 /**
  * Initialize map as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
   previouslyConnected = navigator.onLine;
-
-  initMap();
   if (window.matchMedia) {
     matchesMediaQuery = window.matchMedia(mediaQuery).matches;
   }
@@ -31,10 +30,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
       if (type === 'update-review') {
         if (error) {
           enqueueToast('An error occurred while submitting your review', 'error');
-          updateReviewHTML(true, requestId);
+          requestAnimationFrame(updateReviewHTML.bind(ø, true, requestId));
         } else {
           enqueueToast(`${review.name}'s review has been saved`, 'success');
-          updateReviewHTML(false, requestId, review);
+          requestAnimationFrame(updateReviewHTML.bind(ø, false, requestId, review));
         }
       }
     });
@@ -43,38 +42,40 @@ document.addEventListener('DOMContentLoaded', (event) => {
   if ('onLine' in navigator) {
     window.addEventListener('online', showConnectionStatus);
     window.addEventListener('offline', showConnectionStatus);
-    showConnectionStatus();
+    requestAnimationFrame(showConnectionStatus);
   }
 
-  const toast = document.getElementById('toast');
+  fetchRestaurantFromURL((error, restaurant) => {
+    if (error) { // Got an error!
+      console.error(error);
+    } else {
+      requestAnimationFrame(fillBreadcrumb.bind(ø, restaurant));
+      requestAnimationFrame(fillRestaurantHTML.bind(ø, restaurant));
+      requestAnimationFrame(initMap);
+      requestAnimationFrame(DBHelper.mapMarkerForRestaurant.bind(ø, self.restaurant, self.newMap));
+      fetchReviews(restaurant.id);
+    }
+  });
 });
 
 /**
  * Initialize leaflet map
  */
 const initMap = () => {
-  fetchRestaurantFromURL((error, restaurant) => {
-    const MAPBOX_API_KEY = 'pk.eyJ1IjoiYW5lZXNhLXNhbGVoIiwiYSI6ImNqa2xmZHVwMDFoYW4zdnAwYWplMm53bHEifQ.V11dDOtEnWSwTxY-C8mJLw';
-    if (error) { // Got an error!
-      console.error(error);
-    } else {
-      self.newMap = L.map('map', {
-        center: [restaurant.latlng.lat, restaurant.latlng.lng],
-        zoom: 16,
-        scrollWheelZoom: false,
-      });
-      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
-        mapboxToken: MAPBOX_API_KEY,
-        maxZoom: 18,
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, '
-          + '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, '
-          + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        id: 'mapbox.streets',
-      }).addTo(newMap);
-      fillBreadcrumb();
-      DBHelper.mapMarkerForRestaurant(self.restaurant, self.newMap);
-    }
+  const MAPBOX_API_KEY = 'pk.eyJ1IjoiYW5lZXNhLXNhbGVoIiwiYSI6ImNqa2xmZHVwMDFoYW4zdnAwYWplMm53bHEifQ.V11dDOtEnWSwTxY-C8mJLw';
+  self.newMap = L.map('map', {
+    center: [restaurant.latlng.lat, restaurant.latlng.lng],
+    zoom: 16,
+    scrollWheelZoom: false,
   });
+  L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
+    mapboxToken: MAPBOX_API_KEY,
+    maxZoom: 18,
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, '
+        + '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, '
+        + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    id: 'mapbox.streets',
+  }).addTo(newMap);
 };
 
 /**
@@ -107,6 +108,11 @@ const updateRestaurantContainerAria = () => {
   }
 };
 
+const showErrorLoadingRestaurant = () => {
+  document.getElementById('main-error').classList.add('show');
+  document.getElementById('wrap-main-content').classList.add('hide');
+};
+
 /**
  * Get current restaurant from page URL.
  */
@@ -119,18 +125,14 @@ const fetchRestaurantFromURL = (callback) => {
   if (!id) { // no id found in URL
     const error = 'No restaurant id in URL';
     callback(error, null);
-    document.getElementById('main-error').classList.add('show');
-    document.getElementById('wrap-main-content').classList.add('hide');
+    requestAnimationFrame(showErrorLoadingRestaurant);
   } else {
     DBHelper.fetchRestaurantById(id, (error, restaurant) => {
       self.restaurant = restaurant;
       if (!restaurant) {
-        document.getElementById('main-error').classList.add('show');
-        document.getElementById('wrap-main-content').classList.add('hide');
+        requestAnimationFrame(showErrorLoadingRestaurant);
         return;
       }
-      fetchReviews(id);
-      fillRestaurantHTML();
       callback(null, restaurant);
     });
   }
@@ -264,13 +266,13 @@ const fetchReviews = (id) => {
       console.error(error);
       return;
     }
-    fillReviewsHTML();
+    requestAnimationFrame(fillReviewsHTML.bind(ø, reviews));
     DBHelper.getOutboxReviews(id, (error, outboxReviews) => {
       if (error) {
         console.log(error);
       } else {
         self.outboxReviews = outboxReviews;
-        fillSendingReviewsHTML();
+        requestAnimationFrame(fillSendingReviewsHTML.bind(ø, outboxReviews));
       }
     });
   });

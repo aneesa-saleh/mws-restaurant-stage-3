@@ -99,6 +99,12 @@ gulp.task('scripts', () => {
     .pipe(concat('restaurant_info.js'))
     .pipe(gulp.dest('dist/js'));
 
+  gulp.src('src/js/worker.js')
+    .pipe(babel({
+      presets: ['@babel/env'],
+    }))
+    .pipe(gulp.dest('dist/js'));
+
   gulp.src([
     'src/js/helpers/swhelper.js',
     'src/js/helpers/dbhelper.js',
@@ -129,6 +135,15 @@ gulp.task('scripts-dist', () => {
       presets: ['@babel/env'],
     }))
     .pipe(concat('restaurant_info.js'))
+    .pipe(uglify())
+    .pipe(sourcemaps.write('../sourcemaps'))
+    .pipe(gulp.dest('dist/js'));
+
+  gulp.src('src/js/worker.js')
+    .pipe(sourcemaps.init())
+    .pipe(babel({
+      presets: ['@babel/env'],
+    }))
     .pipe(uglify())
     .pipe(sourcemaps.write('../sourcemaps'))
     .pipe(gulp.dest('dist/js'));
