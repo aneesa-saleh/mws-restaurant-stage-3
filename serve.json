@@ -1,0 +1,19 @@
+{
+  "directoryListing": false,
+  "cleanUrls": ["index.html"],
+  "headers": [
+    {
+      "source" : "**/*.@(jpe?g|gif|png|css|js)",
+      "headers" : [{
+        "key" : "Cache-Control",
+        "value" : "max-age=7200"
+      }]
+    }, {
+      "source" : "**/*.html",
+      "headers" : [{
+        "key" : "Cache-Control",
+        "value" : "max-age=300"
+      }]
+    }
+  ]
+}

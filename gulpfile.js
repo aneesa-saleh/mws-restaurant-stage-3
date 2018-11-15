@@ -43,6 +43,11 @@ gulp.task('styles', () => {
     .pipe(gulp.dest('dist/css'));
 });
 
+gulp.task('copy-serve-config', () => {
+  gulp.src('serve.json')
+    .pipe(gulp.dest('dist'));
+});
+
 gulp.task('copy-html', () => {
   gulp.src('src/*.html')
     .pipe(gulp.dest('dist'));
@@ -151,7 +156,7 @@ gulp.task('scripts-dist', () => {
 
 gulp.task('dist', [
   'grunt-imgs',
-  'grunt-favicons',
+  'copy-serve-config',
   'copy-html',
   'copy-manifest',
   'sw-dist',

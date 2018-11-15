@@ -9,7 +9,8 @@
     "include-all": "^1.0.0",
     "rc": "1.0.1",
     "sails": "^0.12.13",
-    "sails-disk": "~0.10.9"
+    "sails-disk": "~0.10.9",
+    "serve": "^10.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
@@ -39,7 +40,8 @@
   "scripts": {
     "debug": "node debug app.js",
     "start": "node app.js",
-    "gulp": "gulp"
+    "gulp": "gulp",
+    "serve": "serve -l 8000 dist"
   },
   "main": "app.js",
   "repository": {
