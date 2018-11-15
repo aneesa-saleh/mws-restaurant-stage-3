@@ -76,7 +76,6 @@ gulp.task('sw', () => {
     .pipe(babel({
       presets: ['@babel/env'],
     }))
-    .pipe(sourcemaps.write())
     .pipe(gulp.dest('dist'));
 });
 
@@ -87,7 +86,7 @@ gulp.task('sw-dist', () => {
       presets: ['@babel/env'],
     }))
     .pipe(uglify())
-    .pipe(sourcemaps.write())
+    .pipe(sourcemaps.write('sourcemaps'))
     .pipe(gulp.dest('dist'));
 });
 
@@ -121,22 +120,22 @@ gulp.task('scripts', () => {
 
 gulp.task('scripts-dist', () => {
   gulp.src('src/js/main.js')
-    // .pipe(sourcemaps.init())
+    .pipe(sourcemaps.init())
     .pipe(babel({
       presets: ['@babel/env'],
     }))
     .pipe(uglify())
-    // .pipe(sourcemaps.write())
+    .pipe(sourcemaps.write('../sourcemaps'))
     .pipe(gulp.dest('dist/js'));
 
   gulp.src(['src/js/restaurant_info.js', 'src/js/helpers/addReviewModal.js'])
-    // .pipe(sourcemaps.init())
+    .pipe(sourcemaps.init())
     .pipe(babel({
       presets: ['@babel/env'],
     }))
     .pipe(concat('restaurant_info.js'))
     .pipe(uglify())
-    // .pipe(sourcemaps.write())
+    .pipe(sourcemaps.write('../sourcemaps'))
     .pipe(gulp.dest('dist/js'));
 
   gulp.src([
@@ -146,13 +145,13 @@ gulp.task('scripts-dist', () => {
     'src/js/helpers/toasts.js',
     'src/js/helpers/lazyLoad.js',
   ])
-    // .pipe(sourcemaps.init())
+    .pipe(sourcemaps.init())
     .pipe(babel({
       presets: ['@babel/env'],
     }))
     .pipe(concat('helpers.js'))
     .pipe(uglify())
-    // .pipe(sourcemaps.write())
+    .pipe(sourcemaps.write('../sourcemaps'))
     .pipe(gulp.dest('dist/js'));
 });
 
