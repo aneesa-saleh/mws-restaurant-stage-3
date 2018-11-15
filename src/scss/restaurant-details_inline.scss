@@ -415,6 +415,10 @@ nav {
 	.restaurant-cuisine {
 		padding: 3px 0;
 	}
+
+	.restaurant-img-container picture {
+	  min-height: 300px;
+	}
 }
 
 @media screen and (min-width: 600px) {
@@ -425,6 +429,10 @@ nav {
 	.restaurant-cuisine {
 		padding: 5px 0;
 	}
+
+	.restaurant-img-container picture {
+	  min-height: 400px;
+	}
 }
 
 @media screen and (min-width: 800px) {
@@ -432,9 +440,7 @@ nav {
 		font-size: 12pt;
 		padding: 8px 0;
 	}
-}
 
-@media screen and (min-width: 800px) {
 	.restaurant-container {
 		margin-top: 0;
 		order: -1;
@@ -444,6 +450,10 @@ nav {
 	.restaurant-address {
 		font-size: 16pt;
 		padding: 0;
+	}
+
+	.restaurant-img-container picture {
+	  min-height: 380px;
 	}
 }
 
