@@ -1,6 +1,9 @@
 {
   "directoryListing": false,
-  "cleanUrls": ["index.html"],
+  "cleanUrls": false,
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" }
+  ],
   "headers": [
     {
       "source" : "**/*.@(jpe?g|gif|png|css|js)",

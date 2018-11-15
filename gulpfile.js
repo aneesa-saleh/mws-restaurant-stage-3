@@ -21,6 +21,7 @@ gulp.task('serve', ['styles'], () => {
   gulp.watch('src/scss/*.scss', ['styles']);
   gulp.watch('src/js/**/*.js', ['scripts-dist']);
   gulp.watch('src/service-worker.js', ['sw-dist']);
+  gulp.watch('serve.json', ['copy-serve-config']);
   gulp.watch('dist/*.html').on('change', browserSync.reload);
   gulp.watch('dist/js/**/*.js').on('change', browserSync.reload);
   gulp.watch('dist/css/*.css').on('change', browserSync.reload);
