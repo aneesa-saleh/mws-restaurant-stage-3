@@ -360,6 +360,14 @@ nav {
 	display: block;
 	margin: 10px 0;
 	position: relative;
+
+	picture {
+		display: block;
+	  min-height: 200px;
+	  background: lightgray;
+	  border-bottom-right-radius: 15px;
+		border-top-left-radius: 15px;
+	}
 }
 
 .restaurant-img {
@@ -387,6 +395,7 @@ nav {
 	text-align: center;
 	text-transform: uppercase;
 	width: 100%;
+	min-height: 25px;
 }
 
 .restaurant-address {
@@ -499,8 +508,22 @@ nav {
 	visibility: hidden;
 }
 
+.mark-as-favourite {
+	min-width: 100px;
+
+	&:disabled {
+		cursor: wait;
+		opacity: 0.7;
+	}
+}
+
 .toast {
   visibility: hidden;
+}
+
+.add-review-button[disabled="true"] {
+	cursor: wait;
+	background-color: #4c4c4c;
 }
 
 /* ====================== Leaflet ====================== */

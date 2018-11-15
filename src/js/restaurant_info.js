@@ -119,20 +119,18 @@ const fetchRestaurantFromURL = (callback) => {
   if (!id) { // no id found in URL
     const error = 'No restaurant id in URL';
     callback(error, null);
-    document.getElementById('main-spinner').classList.remove('show');
     document.getElementById('main-error').classList.add('show');
+    document.getElementById('wrap-main-content').classList.add('hide');
   } else {
     DBHelper.fetchRestaurantById(id, (error, restaurant) => {
       self.restaurant = restaurant;
       if (!restaurant) {
-        document.getElementById('main-spinner').classList.remove('show');
         document.getElementById('main-error').classList.add('show');
+        document.getElementById('wrap-main-content').classList.add('hide');
         return;
       }
       fetchReviews(id);
       fillRestaurantHTML();
-      document.getElementById('main-spinner').classList.remove('show');
-      document.getElementById('wrap-main-content').classList.remove('hide');
       callback(null, restaurant);
     });
   }
@@ -189,6 +187,10 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
 
   const addReviewOverlayHeading = document.getElementById('add-review-overlay-heading');
   addReviewOverlayHeading.innerHTML = `Add review for ${restaurant.name}`;
+
+  // enable buttons
+  document.getElementById('mark-as-favourite').removeAttribute('disabled');
+  document.getElementById('add-review-button').removeAttribute('disabled');
 
   // fill operating hours
   if (restaurant.operating_hours) {
