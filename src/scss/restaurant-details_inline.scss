@@ -255,6 +255,13 @@ nav {
 	}
 } /* .map-container */
 
+.map.leaflet-placeholder {
+	background-image: url('/img/restaurant_map_tiny.png');
+	// https://jmperezperez.com/medium-image-progressive-loading-placeholder/
+	background-size: cover;
+  background-repeat: no-repeat;
+}
+
 .map-skip-link {
 	background-color: #A36A00;
 	color: white;

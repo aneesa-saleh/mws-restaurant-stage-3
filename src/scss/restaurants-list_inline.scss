@@ -221,6 +221,14 @@ header {
 }
 
 /* ====================== Leaflet ====================== */
+
+.map.leaflet-placeholder {
+	background-image: url('/img/restaurants_map_tiny.png');
+	// https://jmperezperez.com/medium-image-progressive-loading-placeholder/
+	background-size: cover;
+  background-repeat: no-repeat;
+}
+
 /* required styles */
 
 .leaflet-pane,

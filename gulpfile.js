@@ -60,13 +60,8 @@ gulp.task('copy-manifest', () => {
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('copy-svg', () => {
-  gulp.src('src/img/*.svg')
-    .pipe(gulp.dest('dist/img'));
-});
-
-gulp.task('copy-gif', () => {
-  gulp.src('src/img/*.gif')
+gulp.task('copy-img', () => {
+  gulp.src(['src/img/*.svg', 'src/img/*.png', 'src/img/*.gif'])
     .pipe(gulp.dest('dist/img'));
 });
 
@@ -161,8 +156,7 @@ gulp.task('dist', [
   'copy-html',
   'copy-manifest',
   'sw-dist',
-  'copy-svg',
-  'copy-gif',
+  'copy-img',
   'styles',
   'scripts-dist',
 ]);
@@ -172,8 +166,7 @@ gulp.task('default', [
   'copy-serve-config',
   'copy-manifest',
   'sw-dist',
-  'copy-svg',
-  'copy-gif',
+  'copy-img',
   'styles',
   'scripts-dist',
   'serve',
