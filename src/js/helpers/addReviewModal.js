@@ -26,6 +26,10 @@ function closeModal() {
 }
 
 function trapTabKey(event) {
+  if (event.key && event.key === 'Escape') {
+    closeModal();
+    return;
+  }
   const overlay = document.querySelector('.overlay');
   const interactiveElements = overlay.querySelectorAll('button, input');
   const firstElement = interactiveElements[0];
