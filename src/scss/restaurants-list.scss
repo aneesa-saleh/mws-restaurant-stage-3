@@ -323,7 +323,7 @@ nav {
 	} /* article */
 
 	.restaurant-img {
-		background-color: gray;
+		background-color: #c4c4c4;
 		border-bottom-right-radius: 0;
 		border-top-left-radius: 15px;
 		display: block;
@@ -362,4 +362,87 @@ nav {
 	margin: 0 auto;
 	width: 40px;
 	height: 40px;
+}
+
+/***** toast *****/
+
+.toast {
+  position: fixed;
+  box-shadow: 0px 0px 4px 1px rgba(100,100,100,0.6);
+  background-color: #333333;
+  font-size: 16px;
+  transition: transform 0.3s ease, visibility 0.3s ease;
+  z-index: 9999;
+  color: white;
+  font-family: Open-sans, sans-serif;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+  transform: translate(0, calc(-100%));
+  width: calc(100% - 20px);
+	font-weight: 300;
+	visibility: hidden;
+}
+
+.toast.show {
+  transform: translate(0,0);
+	visibility: visible;
+}
+
+.toast.error {
+  background-color: #CC0000;
+}
+
+.toast.success {
+  background-color: #008A00;
+}
+
+.toast-content {
+	text-align: center;
+  width: calc(100% - 25px);
+  display: inline-block;
+  margin: 5px 0;
+}
+
+.toast-text {
+	margin-left: 5px;
+}
+
+.close-toast {
+  border: 0;
+  outline: 0;
+  padding: 5px;
+  margin-left: 5px;
+  font-size: 14px;
+  width: 20px;
+  cursor: pointer;
+  color: inherit;
+  background: transparent;
+  float: right;
+}
+
+.close-toast:focus {
+  outline: 1px solid lightblue;
+}
+
+@media screen and (min-width: 600px) {
+  .toast {
+    top: auto;
+    left: auto;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    border-radius: 3px;
+    transform: translate(calc(100% + 20px), 0);
+    width: fit-content;
+  }
+
+  .toast-content {
+    width: auto;
+  }
+
+	.close-toast {
+	  float: none;
+	}
 }

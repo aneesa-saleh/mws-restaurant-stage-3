@@ -4,11 +4,14 @@ let cuisines = [];
 let newMap;
 const markers = [];
 let mapInitialized = false;
+let previouslyConnected;
 const ø = Object.create(null);
+
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
+  previouslyConnected = navigator.onLine;
   updateRestaurants();
   fetchNeighborhoods();
   fetchCuisines();
@@ -16,6 +19,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
   if (window.caches) {
     setInterval(cleanMapboxTilesCache, 5000);
+  }
+
+  if ('onLine' in navigator) {
+    window.addEventListener('online', showConnectionStatus);
+    window.addEventListener('offline', showConnectionStatus);
+    requestAnimationFrame(showConnectionStatus);
   }
 });
 
@@ -250,3 +259,13 @@ const addMarkersToMap = (restaurants = self.restaurants) => {
     self.markers.push(marker);
   });
 };
+
+function showConnectionStatus() {
+  if (navigator.onLine && !previouslyConnected) { // user came back online
+    enqueueToast('You are back online', 'success');
+  } else if (!navigator.onLine && previouslyConnected) { // user went offline
+    enqueueToast('You are offline', 'error');
+  }
+
+  previouslyConnected = navigator.onLine;
+}

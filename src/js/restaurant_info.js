@@ -460,8 +460,6 @@ const toggleRestaurantAsFavourite = () => {
 };
 
 function showConnectionStatus() {
-  const connectionStatus = document.getElementById('connectionStatus');
-
   if (navigator.onLine && !previouslyConnected) { // user came back online
     enqueueToast('You are back online', 'success');
   } else if (!navigator.onLine && previouslyConnected) { // user went offline
