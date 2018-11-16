@@ -20,13 +20,8 @@ npm i sails -g
 npm start
 ```
 
-### Build Frontend code
-In another terminal window:
-```
-npm run gulp-dist
-```
-
 ### Run Frontend code server
+In another terminal window:
 ```
 npm run serve
 ```
