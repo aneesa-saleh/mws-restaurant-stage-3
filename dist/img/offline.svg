@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+<svg version="1.1" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<path id="b" d="m0 0h400v300h-400v-300z"/>
+<text id="c" transform="translate(-3.8514 -20.642)" x="191.35" y="128.18" alignment-baseline="before-edge" dominant-baseline="text-before-edge" font-family="Verdana" font-size="28" letter-spacing="0" style="line-height:100%" xml:space="preserve"><tspan x="191.35" dy="0em" alignment-baseline="before-edge" dominant-baseline="text-before-edge">☕</tspan></text>
+<style>@font-face {
+    font-family: Verdana;
+    font-weight: 300;
+    }</style>
+<text id="a" transform="translate(-62.125 -5.25)" x="187.5" y="150" alignment-baseline="before-edge" dominant-baseline="text-before-edge" font-family="Verdana" font-size="18" letter-spacing="0" style="line-height:100%" xml:space="preserve"><tspan x="187.5" dy="0em" alignment-baseline="before-edge" dominant-baseline="text-before-edge">YOU ARE OFFLINE</tspan></text>
+</defs>
+<use fill="#e9e9e9" xlink:href="#b"/>
+<use fill="#7fd4fb" xlink:href="#c"/>
+<use fill="#000000" xlink:href="#a"/>
+</svg>

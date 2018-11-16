@@ -1,0 +1,22 @@
+{
+  "directoryListing": false,
+  "cleanUrls": false,
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source" : "**/*.@(jpg|jpeg|gif|png|css|js)",
+      "headers" : [{
+        "key" : "Cache-Control",
+        "value" : "max-age=31536000"
+      }]
+    }, {
+      "source" : "**/*.html",
+      "headers" : [{
+        "key" : "Cache-Control",
+        "value" : "no-cache"
+      }]
+    }
+  ]
+}
