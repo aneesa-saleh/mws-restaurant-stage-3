@@ -42,6 +42,7 @@
     "debug": "node debug app.js",
     "start": "node app.js",
     "gulp": "gulp",
+    "gulp-dist": "gulp dist",
     "serve": "serve -l 8000 dist"
   },
   "main": "app.js",

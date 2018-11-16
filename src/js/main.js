@@ -12,6 +12,11 @@ const ø = Object.create(null);
  */
 document.addEventListener('DOMContentLoaded', (event) => {
   previouslyConnected = navigator.onLine;
+  self.newMap = L.map('map', {
+    center: [40.722216, -73.987501],
+    zoom: 12,
+    scrollWheelZoom: false,
+  });
   updateRestaurants();
   fetchNeighborhoods();
   fetchCuisines();
@@ -86,11 +91,6 @@ const fillCuisinesHTML = (cuisines = self.cuisines) => {
  * Initialize leaflet map, called from HTML.
  */
 const initMap = () => {
-  self.newMap = L.map('map', {
-    center: [40.722216, -73.987501],
-    zoom: 12,
-    scrollWheelZoom: false,
-  });
   const MAPBOX_API_KEY = 'pk.eyJ1IjoiYW5lZXNhLXNhbGVoIiwiYSI6ImNqa2xmZHVwMDFoYW4zdnAwYWplMm53bHEifQ.V11dDOtEnWSwTxY-C8mJLw';
   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
     mapboxToken: MAPBOX_API_KEY,
@@ -120,11 +120,8 @@ const updateRestaurants = () => {
     if (error) { // Got an error!
       console.error(error);
     } else {
-      requestAnimationFrame(fillRestaurantsHTML.bind(ø, restaurants));
-      if (!mapInitialized) {
-        requestAnimationFrame(initMap);
-      }
-      requestAnimationFrame(addMarkersToMap.bind(ø, restaurants));
+      // requestAnimationFrame(fillRestaurantsHTML.bind(ø, restaurants));
+      fillRestaurantsHTML(restaurants);
     }
   });
 };
@@ -157,6 +154,11 @@ const fillRestaurantsHTML = (restaurants = self.restaurants) => {
   });
   // register observer after the picture elements have been loaded
   registerObserver(document.querySelectorAll('#restaurants-list picture'), loadPicture);
+
+  if (!mapInitialized) {
+    requestAnimationFrame(initMap);
+  }
+  requestAnimationFrame(addMarkersToMap.bind(ø, restaurants));
 };
 
 function loadPicture(picture) {

@@ -29,6 +29,7 @@ self.addEventListener('install', (event) => {
       '/img/restaurant_map_tiny.png',
       '/img/restaurants_map_tiny.png',
       'https://cdn.rawgit.com/jakearchibald/idb/master/lib/idb.js',
+      'https://use.fontawesome.com/releases/v5.5.0/css/all.css',
       'https://unpkg.com/leaflet@1.3.1/dist/leaflet.css',
       'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js',
       'https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700',
@@ -135,7 +136,7 @@ self.addEventListener('fetch', (event) => {
   } else if (requestUrl.origin === 'https://fonts.gstatic.com') {
     event.respondWith(serveFonts(event.request));
     return;
-  } else if (requestUrl.origin === 'https://use.fontawesome.com') {
+  } else if (requestUrl.origin === 'https://use.fontawesome.com' && !(requestUrl.pathname.endsWith('.css'))) {
     event.respondWith(serveFontAwesome(event.request));
     return;
   }
