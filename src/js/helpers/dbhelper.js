@@ -128,6 +128,10 @@ class DBHelper {
       const reviewsByRestaurantIdIndex = store.index('restaurant_id');
       // id comes as a string from the url, convert to a number before lookup
       return reviewsByRestaurantIdIndex.getAll(Number.parseInt(restaurantId, 10)).then((idbReviews) => {
+        // get the value of idbReviews length before fetch
+        let idbReviewsLength = 0;
+        if (idbReviews && idbReviews.length) idbReviewsLength = idbReviews.length;
+
         const fetchResponse = fetch(reviewsByRestaurantIdURL)
           .then((response) => {
             if (!response.ok) {
@@ -144,7 +148,7 @@ class DBHelper {
             });
             return response.json();
           });
-        if (idbReviews && idbReviews.length > 0) {
+        if (idbReviewsLength) {
           return idbReviews;
         }
         // if IDB.reviews is empty, return the fetch response instead
