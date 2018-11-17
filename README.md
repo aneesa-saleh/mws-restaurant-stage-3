@@ -1,5 +1,17 @@
 # Mobile Web Specialist Restaurant Reviews - Stage 3
 
+Final stage of the Restaurant Reviews challenge for Udacity's Mobile Web Specialist Nanodegree.
+
+Site is:
+* Fully responsive
+* Offline capable
+* Fully accessible
+
+More details: [Project Rubric](https://review.udacity.com/#!/rubrics/1132/view).
+
+## Live Demo
+[https://restaurant-reviews.glitch.me/](https://restaurant-reviews.glitch.me/)
+
 ## Getting Started
 
 ### Development local API Server
