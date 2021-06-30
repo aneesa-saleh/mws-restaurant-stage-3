@@ -51,7 +51,8 @@ class DBHelper {
             });
             return response.json();
           });
-        if (idbRestaurants && idbRestaurants.length > 0) {
+        if (idbRestaurants && idbRestaurants.length > 1) {
+          // use > 1 in case restaurant page was visited before home page and only that restaurant is in storage
           return idbRestaurants;
         }
         // if IDB.restaurants is empty, return the fetch response instead
