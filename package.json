@@ -17,7 +17,7 @@
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
-    "browser-sync": "^2.24.7",
+    "browser-sync": "^2.29.1",
     "csslint": "^1.0.5",
     "eslint": "^5.3.0",
     "eslint-config-airbnb-base": "^13.1.0",
