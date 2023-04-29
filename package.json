@@ -15,7 +15,7 @@
     "serve": "^10.1.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
+    "@babel/core": "^7.21.5",
     "@babel/preset-env": "^7.0.0",
     "browser-sync": "^2.24.7",
     "csslint": "^1.0.5",
